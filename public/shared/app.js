@@ -2,7 +2,10 @@ var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize',
 app.config(function($stateProvider, $urlRouterProvider){
 	$urlRouterProvider.otherwise("/")
 	$stateProvider
-		.state("home", {})
+		.state("home", {
+            url: '/',
+            templateUrl: '../home/home.html'
+        })
 		.state("login", {});
 });
 
