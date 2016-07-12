@@ -6,7 +6,10 @@ app.config(function($stateProvider, $urlRouterProvider){
             url: '/',
             templateUrl: '../home/home.html'
         })
-		.state("login", {});
+		.state("login", {
+            url: '/login',
+            templateUrl: '../login/login.html'
+        });
 });
 
 app.factory("Session", function(){
