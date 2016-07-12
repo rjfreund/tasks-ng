@@ -7,7 +7,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
         $locationProvider.html5Mode(true).hashPrefix('!');;
         $stateProvider
             .state("home", {
-                url: '/',
+                url: '/home/',
                 templateUrl: '../home/home.html'
             })
             .state("login", {
