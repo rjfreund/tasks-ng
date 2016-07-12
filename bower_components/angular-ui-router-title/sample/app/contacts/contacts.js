@@ -20,7 +20,7 @@ angular.module('uiRouterSample.contacts', [
 
           // Example of loading a template from a file. This is also a top level state,
           // so this template file will be loaded and then inserted into the ui-view
-          // within index.html.
+          // within layout.html.
           templateUrl: 'app/contacts/contacts.html',
 
           // Use `resolve` to resolve any asynchronous controller dependencies
@@ -131,7 +131,7 @@ angular.module('uiRouterSample.contacts', [
                 }]
             },
 
-            // This one is targeting the ui-view="hint" within the unnamed root, aka index.html.
+            // This one is targeting the ui-view="hint" within the unnamed root, aka layout.html.
             // This shows off how you could populate *any* view within *any* ancestor state.
             'hint@': {
               template: 'This is contacts.detail populating the "hint" ui-view'

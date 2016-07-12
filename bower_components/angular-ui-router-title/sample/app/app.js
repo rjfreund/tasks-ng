@@ -66,8 +66,8 @@ angular.module('uiRouterSample', [
           // Example of an inline template string. By default, templates
           // will populate the ui-view within the parent state's template.
           // For top level states, like this one, the parent template is
-          // the index.html file. So this template will be inserted into the
-          // ui-view within index.html.
+          // the layout.html file. So this template will be inserted into the
+          // ui-view within layout.html.
           template: '<p class="lead">Welcome to the UI-Router Demo</p>' +
             '<p>Use the menu above to navigate. ' +
             'Pay attention to the <code>$state</code> and <code>$stateParams</code> values below.</p>' +
