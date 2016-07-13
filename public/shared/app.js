@@ -1,14 +1,15 @@
 var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad']);
 
-app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
-    function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
+app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider", "Security",
+    function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider, Security){
         $urlRouterProvider.otherwise("/");
         $resourceProvider.defaults.stripTrailingSlashes = false;        
         $locationProvider.html5Mode(true).hashPrefix('!');
         $stateProvider
             .state("home", {
                 url: '/home/',
-                templateUrl: '../home/home.html'                
+                templateUrl: '../home/home.html',
+                resolve: { authenticate: Security.authenticate }
             })
             .state("login", {
                 url: '/login/',
@@ -21,17 +22,58 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             });        
     }]);
 
-app.factory("Session", function(){
+app.factory("Security", ['$http','$q', function($http, $q){
+    var token = null;
 
-});
+    function login(email, password){        
+        return $http({
+            method: 'POST',
+            url: 'http://localhost:3000/task-tracker/authenticate',
+            data: { email: email, password: password}
+        }).then(function successCallback(response) {
+            if (!response.data.token){ console.error("token not in response data!!!!!"); return; }
+            token = response.data.token;
+            return response.data.token;
+        }, function errorCallback(response) {
+            if (!response.data){ return "Could not get response from login database."; }            
+            return response.data.error;
+        });        
+    }
 
-app.run(['$rootScope', '$location', '$state', '$anchorScroll',
-    function($rootScope, $location, $state, $anchorScroll){
-        $rootScope.$on('$stateChangeStart',
-            function(event, toState, toParams, fromState, fromParams){
-                //make sure that the user is logged in
-                // if (!isUserLoggedIn) {
-                //		redirectToLoginPage();
-                //}
-            });
-    }]);
+    function isUserLoggedIn(){
+        return getToken().then(function(token){
+            return true;
+        }, function(error){
+            return false;
+        });
+    }
+
+    function authenticate(){
+        isUserLoggedIn().then(function(userIsLoggedIn){
+            //continue to state
+        }, function(userIsNotLoggedIn){
+            $state.go('login');
+        });
+    }
+
+    function getToken(){ 
+        var deferred = $q.defer();
+        deferred.notify("About to get user token.");
+        if (!token){ deferred.reject("Token not set."); return deferred; }        
+        deferred.resolve(token);
+        return deferred.promise; 
+    }
+    return { 
+        login: login, 
+        getToken: getToken, 
+        isUserLoggedIn: isUserLoggedIn,
+        authenticate: authenticate
+    };
+}]);
+
+app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
+    function($rootScope, $location, $state, $anchorScroll, Security){
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+                	
+    });
+}]);    

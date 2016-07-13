@@ -1,19 +1,15 @@
 var app = angular.module('tasks');
 
-app.controller("LoginController", ['$scope', function($scope) {
+app.controller("LoginController", ['$scope', '$state', 'Security',
+    function($scope, $state, Security) {
     $scope.login = function(credentials){
-        $http({
-            method: 'POST',
-            url: 'api.rjfreund.com/task-tracker/authenticate',
-            data: credentials
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.dir(response);
-        }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            console.dir(response);
+        if (!credentials.email){ alert("Email is invalid."); return; }
+        if (!credentials.password){ alert("Password is invalid"); return; }
+        Security.login(credentials.email, credentials.password)
+        .then(function(token){
+            $state.go('home');
+        }, function(error){
+            alert(error);
         });
     };
 }]);
