@@ -1,22 +1,24 @@
-var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap']);
+var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad']);
 
 app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
     function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
-        //$urlRouterProvider.otherwise("/");
-        $resourceProvider.defaults.stripTrailingSlashes = false;
-        $locationProvider.html5Mode(true).hashPrefix('!');;
+        $urlRouterProvider.otherwise("/");
+        $resourceProvider.defaults.stripTrailingSlashes = false;        
+        $locationProvider.html5Mode(true).hashPrefix('!');
         $stateProvider
             .state("home", {
                 url: '/home/',
-                templateUrl: '../home/home.html'
+                templateUrl: '../home/home.html'                
             })
             .state("login", {
                 url: '/login/',
-                templateUrl: '../login/login.html'
-            });
-        $urlRouterProvider.otherwise(function($injector, $location){
-            //$state.go('home');
-        });
+                templateUrl: '../login/login.html',
+                resolve: { 
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../login/login.controller.js');
+                    }]
+                }
+            });        
     }]);
 
 app.factory("Session", function(){
