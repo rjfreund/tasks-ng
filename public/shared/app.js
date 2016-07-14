@@ -9,7 +9,11 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             .state("home", {
                 url: '/home/',
                 templateUrl: '../home/home.html',
-                resolve: { authenticate: ['Security', function(Security){ Security.authenticate(); } ] }
+                resolve: { 
+                    authenticate: ['Security', function(Security){
+                        return Security.authenticate();
+                    }]
+                }                            
             })
             .state("login", {
                 url: '/login/',
@@ -52,14 +56,14 @@ app.factory("Security", ['$http','$q', function($http, $q){
         isUserLoggedIn().then(function(userIsLoggedIn){
             //continue to state
         }, function(userIsNotLoggedIn){
-            $state.go('login');
+            return userIsLoggedIn;
         });
     }
 
     function getToken(){ 
         var deferred = $q.defer();
         deferred.notify("About to get user token.");
-        if (!token){ deferred.reject("Token not set."); return deferred; }        
+        if (!token){ deferred.reject("Token not set."); return deferred.promise; }        
         deferred.resolve(token);
         return deferred.promise; 
     }
@@ -75,5 +79,8 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
     function($rootScope, $location, $state, $anchorScroll, Security){
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
                 	
+    });
+    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
+        console.log(error);
     });
 }]);    
