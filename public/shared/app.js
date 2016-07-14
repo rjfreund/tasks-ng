@@ -1,7 +1,7 @@
-var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad']);
+var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad', 'chart.js']);
 
-app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider", "Security",
-    function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider, Security){
+app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
+    function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
         $urlRouterProvider.otherwise("/");
         $resourceProvider.defaults.stripTrailingSlashes = false;        
         $locationProvider.html5Mode(true).hashPrefix('!');
@@ -9,7 +9,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             .state("home", {
                 url: '/home/',
                 templateUrl: '../home/home.html',
-                resolve: { authenticate: Security.authenticate }
+                resolve: { authenticate: ['Security', function(Security){ Security.authenticate(); } ] }
             })
             .state("login", {
                 url: '/login/',
