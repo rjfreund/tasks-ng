@@ -9,11 +9,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             .state("home", {
                 url: '/home/',
                 templateUrl: '../home/home.html',
-                resolve: { 
-                    authenticate: ['Security', function(Security){
-                        return Security.authenticate();
-                    }]
-                }                            
+                requiresAuthentication: true                         
             })
             .state("login", {
                 url: '/login/',
@@ -44,19 +40,19 @@ app.factory("Security", ['$http','$q', function($http, $q){
         });        
     }
 
-    function isUserLoggedIn(){
+    function isUserAuthenticated(){
         return getToken().then(function(token){
             return true;
         }, function(error){
-            return false;
+            return $q.reject(false);
         });
     }
 
     function authenticate(){
-        isUserLoggedIn().then(function(userIsLoggedIn){
-            //continue to state
+        return isUserLoggedIn().then(function(userIsLoggedIn){
+            return userIsLoggedIn
         }, function(userIsNotLoggedIn){
-            return userIsLoggedIn;
+            return $q.reject(userIsNotLoggedIn);
         });
     }
 
@@ -70,17 +66,21 @@ app.factory("Security", ['$http','$q', function($http, $q){
     return { 
         login: login, 
         getToken: getToken, 
-        isUserLoggedIn: isUserLoggedIn,
+        isUserAuthenticated: isUserAuthenticated,
         authenticate: authenticate
     };
 }]);
 
 app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
     function($rootScope, $location, $state, $anchorScroll, Security){
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-                	
-    });
-    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
-        console.log(error);
-    });
-}]);    
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+            if (!toState.requiresAuthentication){ return; }
+            Security.isUserAuthenticated().then(function(userIsAuthenicated){   
+                console.log(userIsAuthenicated);
+                //continue going to state         
+            }, function(userIsNotAuthenicated){
+                $state.go('login');
+            });
+        });    
+    }
+]);    
