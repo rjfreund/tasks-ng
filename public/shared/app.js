@@ -1,4 +1,4 @@
-var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad', 'chart.js']);
+var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad', 'chart.js', 'ngStorage']);
 
 app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
     function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
@@ -9,7 +9,12 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             .state("home", {
                 url: '/home/',
                 templateUrl: '../home/home.html',
-                requiresAuthentication: true                         
+                requiresAuthentication: true,
+                resolve: { 
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../home/home.controller.js');
+                    }]
+                }                         
             })
             .state("login", {
                 url: '/login/',
@@ -22,17 +27,17 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             });        
     }]);
 
-app.factory("Security", ['$http','$q', function($http, $q){
-    var token = null;
-
+app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $localStorage){
     function login(email, password){        
         return $http({
             method: 'POST',
-            url: 'http://localhost:3000/task-tracker/authenticate',
+            url: 'http://localhost:3000/task-tracker/login',
             data: { email: email, password: password}
         }).then(function successCallback(response) {
-            if (!response.data.token){ console.error("token not in response data!!!!!"); return; }
-            token = response.data.token;
+            if (!response.data.token){ return $q.reject("token not in response data!!!!!"); }
+            $localStorage.token = response.data.token;
+            $http.defaults.headers.common["Authorization"] = "Bearer " + $localStorage.token;
+            console.log(response.data.token);
             return response.data.token;
         }, function errorCallback(response) {
             if (!response.data){ return "Could not get response from login database."; }            
@@ -40,11 +45,22 @@ app.factory("Security", ['$http','$q', function($http, $q){
         });        
     }
 
+    function logout(){
+        $localStorage.token = null;
+        $http.defaults.headers.common["Authorization"] = null;
+    }
+
     function isUserAuthenticated(){
-        return getToken().then(function(token){
-            return true;
-        }, function(error){
-            return $q.reject(false);
+        return getToken()
+        .then(function(token) {
+            return $http({
+                method: 'POST',
+                url: 'http://localhost:3000/task-tracker/verifytoken'                
+            }).then(function(response){
+                return true;
+            }, function(error){
+                return false;
+            });
         });
     }
 
@@ -59,12 +75,14 @@ app.factory("Security", ['$http','$q', function($http, $q){
     function getToken(){ 
         var deferred = $q.defer();
         deferred.notify("About to get user token.");
-        if (!token){ deferred.reject("Token not set."); return deferred.promise; }        
-        deferred.resolve(token);
+        if (!$localStorage.token){ deferred.reject("Token not set."); return deferred.promise; }        
+        $http.defaults.headers.common["Authorization"] = "Bearer " + $localStorage.token;
+        deferred.resolve($localStorage.token);
         return deferred.promise; 
     }
     return { 
         login: login, 
+        logout: logout,
         getToken: getToken, 
         isUserAuthenticated: isUserAuthenticated,
         authenticate: authenticate
