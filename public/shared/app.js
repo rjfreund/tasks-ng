@@ -27,6 +27,24 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             });        
     }]);
 
+app.factory('Resources', ['$resource', function($resource){
+    function getResource(resourceName){
+        var resourceOptions = { 'get':    {method:'GET'},
+                                'save':   {method:'POST'},
+                                'query':  {method:'GET', isArray:true},
+                                'remove': {method:'DELETE'},
+                                'delete': {method:'DELETE'} };
+        switch(resourceName){
+            case "tasks":
+            default:
+                return $resource('/task-tracker/tasks/:filter'); // need to finish this
+        }
+    }
+
+    return { getResource: getResource };
+    
+}]);
+
 app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $localStorage){
     function login(email, password){        
         return $http({
@@ -36,8 +54,7 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
         }).then(function successCallback(response) {
             if (!response.data.token){ return $q.reject("token not in response data!!!!!"); }
             $localStorage.token = response.data.token;
-            $http.defaults.headers.common["Authorization"] = "Bearer " + $localStorage.token;
-            console.log(response.data.token);
+            $http.defaults.headers.common["Authorization"] = "Bearer " + $localStorage.token;            
             return response.data.token;
         }, function errorCallback(response) {
             if (!response.data){ return "Could not get response from login database."; }            
@@ -93,8 +110,7 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
     function($rootScope, $location, $state, $anchorScroll, Security){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
             if (!toState.requiresAuthentication){ return; }
-            Security.isUserAuthenticated().then(function(userIsAuthenicated){   
-                console.log(userIsAuthenicated);
+            Security.isUserAuthenticated().then(function(userIsAuthenicated){                 
                 //continue going to state         
             }, function(userIsNotAuthenicated){
                 $state.go('login');
