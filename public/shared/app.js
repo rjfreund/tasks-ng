@@ -45,6 +45,12 @@ app.factory('Resources', ['$resource', function($resource){
     
 }]);
 
+app.factory('Time', [function(){
+    function getTimezone(){
+        
+    }
+}]);
+
 app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $localStorage){
     function login(email, password){        
         return $http({

@@ -5,14 +5,20 @@
 	<p>All Tasks</p>
 	<table class="table">
 		<thead>
-			<tr><th>Name</th></tr>
+			<tr>
+				<th>Name</th>
+				<th>Assigned Date</th>
+				<th>Due Date</th>
+			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="task in tasks">
 				<td>{{task.name}}</td>
+				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma': getTimezone}}</td>
+				<td>{{task.due_date}}</td>
 			</tr>
 		</tbody>
 	</table>
-	<a ui-sref="login">Login</a>
-	<button ng-click="logout()">Logout</button>
+	<a ui-sref="login" ng-if="!isUserAuthenticated">Login</a>
+	<button ng-click="logout()" ng-if="isUserAuthenticated">Logout</button>
 </div>
