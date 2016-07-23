@@ -37,7 +37,7 @@ app.factory('Resources', ['$resource', function($resource){
         switch(resourceName){
             case "tasks":
             default:
-                return $resource('/task-tracker/tasks/:filter'); // need to finish this
+                return $resource('/task-tracker/' + resourceName + '/:filter');
         }
     }
 

@@ -2,6 +2,17 @@
 	<div>Task Completion Statistics</div>
 	<div>Recently Completed Tasks</div>
 	<div>Upcoming Tasks</div>
+	<p>All Tasks</p>
+	<table class="table">
+		<thead>
+			<tr><th>Name</th></tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="task in tasks">
+				<td>{{task.name}}</td>
+			</tr>
+		</tbody>
+	</table>
 	<a ui-sref="login">Login</a>
 	<button ng-click="logout()">Logout</button>
 </div>
