@@ -1,4 +1,10 @@
 <div ng-controller="HomeController">
+	<div class="row">
+		<div class=".col-xs-12 textAlignRight">
+			<a ui-sref="login" ng-if="!isUserAuthenticated">Login</a>
+			<button ng-click="logout()" ng-if="isUserAuthenticated">Logout</button>
+		</div>
+	</div>	
 	<div>Task Completion Statistics</div>
 	<div>Recently Completed Tasks</div>
 	<div>Upcoming Tasks</div>
@@ -18,7 +24,5 @@
 				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
 			</tr>
 		</tbody>
-	</table>
-	<a ui-sref="login" ng-if="!isUserAuthenticated">Login</a>
-	<button ng-click="logout()" ng-if="isUserAuthenticated">Logout</button>
+	</table>	
 </div>
