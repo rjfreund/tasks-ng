@@ -6,3 +6,10 @@ body {
 a {
   color: #00B7FF;
 }
+
+.textAlignRight{
+	text-align: right;
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+a {cursor: pointer;}

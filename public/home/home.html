@@ -1,28 +1,33 @@
 <div ng-controller="HomeController">
 	<div class="row">
-		<div class=".col-xs-12 textAlignRight">
+		<div class="col-lg-12 textAlignRight">
 			<a ui-sref="login" ng-if="!isUserAuthenticated">Login</a>
-			<button ng-click="logout()" ng-if="isUserAuthenticated">Logout</button>
+			<button class="btn btn-default" ng-click="logout()" ng-if="isUserAuthenticated">Logout</button>
 		</div>
 	</div>	
-	<div>Task Completion Statistics</div>
-	<div>Recently Completed Tasks</div>
-	<div>Upcoming Tasks</div>
-	<p>All Tasks</p>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Assigned Date</th>
-				<th>Due Date</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="task in tasks">
-				<td>{{task.name}}</td>
-				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
-				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
-			</tr>
-		</tbody>
-	</table>	
+	<div class="row"><div class="col-lg-12">Task Completion Statistics</div></div>
+	<div class="row"><div class="col-lg-12">Recently Completed Tasks</div></div>
+	<div class="row"><div class="col-lg-12">Upcoming Tasks</div></div>
+	<div class="row">
+		<div class="col-lg-12">
+			<p>All Tasks<p>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Assigned Date</th>
+						<th>Due Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="task in tasks">
+						<td>{{task.name}}</td>
+						<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
+						<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<button class="btn btn-default">Add Task</button>	
+		</div>
+	</div>
 </div>
