@@ -14,8 +14,8 @@
 		<tbody>
 			<tr ng-repeat="task in tasks">
 				<td>{{task.name}}</td>
-				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma': getTimezone}}</td>
-				<td>{{task.due_date}}</td>
+				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
+				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
 			</tr>
 		</tbody>
 	</table>
