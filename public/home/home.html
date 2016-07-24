@@ -25,9 +25,11 @@
 						<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
 						<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
 					</tr>
+					<tr ng-if="displayQuickAdd"></tr>
 				</tbody>
 			</table>
-			<button class="btn btn-default">Add Task</button>	
+			<button class="btn btn-default" ng-click"toggleQuickAdd()">Quick Add</button>
+			<button class="btn btn-default">Add Task</button>
 		</div>
 	</div>
 </div>

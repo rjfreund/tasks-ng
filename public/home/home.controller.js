@@ -2,6 +2,7 @@ var app = angular.module("tasks");
 app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q', function($scope, $state, Security, $http, $q){
 	$scope.logout = function(){ Security.logout(); $state.go('login'); };
 	$scope.tasks = [];
+	$scope.isUserAuthenticated = false;
 	$scope.getTasks = function(){
 		var options = {
 		  method: 'GET',
@@ -14,8 +15,7 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 			console.log("error");
 			console.log(response);
 		});
-	};
-	$scope.isUserAuthenticated = false;
+	};	
 	$scope.checkUserAuthentication = function(){
 		Security.isUserAuthenticated().then(function(userIsAuthenticated){
 			$scope.isUserAuthenticated = userIsAuthenticated;
@@ -23,6 +23,9 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 			$scope.isUserAuthenticated = userIsNotAuthenticated;
 		});
 	};
+	$scope.displayQuickAdd = false;
+	$scope.toggleQuickAdd = function(){ $scope.displayQuickAdd = !$scope.displayQuickAdd; };
+
 	$scope.checkUserAuthentication();
 	$scope.getTasks();	
 }]);
