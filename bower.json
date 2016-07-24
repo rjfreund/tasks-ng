@@ -17,6 +17,7 @@
     "bootstrap": "^3.3.6",
     "ngstorage": "^0.3.10",
     "oclazyload": "ocLazyLoad#^1.0.9",
-    "angular-chart.js": "^0.10.2"
+    "angular-chart.js": "^0.10.2",
+    "moment": "^2.14.1"
   }
 }

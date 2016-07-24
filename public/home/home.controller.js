@@ -23,8 +23,19 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 			$scope.isUserAuthenticated = userIsNotAuthenticated;
 		});
 	};
-	$scope.displayQuickAdd = false;
+	$scope.displayQuickAdd = true;
 	$scope.toggleQuickAdd = function(){ $scope.displayQuickAdd = !$scope.displayQuickAdd; };
+	$scope.quickAddTaskSubmit = function(){
+		$http({
+			method: "POST",
+			url: "http://localhost:3000/task-tracker/tasks",
+			data: {
+				name: this.quickAddTaskName,
+				assigned_date: "", //TODO: get date.now as utc
+				due_date: ""
+			}
+		});
+	};
 
 	$scope.checkUserAuthentication();
 	$scope.getTasks();	
