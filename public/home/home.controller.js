@@ -3,6 +3,7 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 	$scope.logout = function(){ Security.logout(); $state.go('login'); };
 	$scope.tasks = [];
 	$scope.isUserAuthenticated = false;
+	$scope.quickAddTask = {};
 	$scope.getTasks = function(){
 		var options = {
 		  method: 'GET',
@@ -26,15 +27,22 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 	$scope.displayQuickAdd = true;
 	$scope.toggleQuickAdd = function(){ $scope.displayQuickAdd = !$scope.displayQuickAdd; };
 	$scope.quickAddTaskSubmit = function(){
+		console.log($scope.quickAddTask);
 		$http({
 			method: "POST",
 			url: "http://localhost:3000/task-tracker/tasks",
 			data: {
-				name: this.quickAddTaskName,
-				assigned_date: "", //TODO: get date.now as utc
-				due_date: ""
+				name: $scope.quickAddTask.name,
+				assigned_date: moment.utc().format(), //TODO: get date.now as utc
+				due_date: moment.utc().format()
 			}
-		});
+		}).then(function success(response){
+			$scope.getTasks();
+		}), function error(response){
+			console.error(response);
+			//TODO: need to add user_id to the post of the task in api
+			//also finish reorganizing api routes into schema and table folders
+		};
 	};
 
 	$scope.checkUserAuthentication();
