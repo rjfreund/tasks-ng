@@ -15,8 +15,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                         return $ocLazyLoad.load('../home/home.controller.js');
                     }]
                 }                         
-            })
-            .state("login", {
+            }).state("login", {
                 url: '/login/',
                 templateUrl: '../login/login.html',
                 resolve: { 
@@ -24,7 +23,15 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                         return $ocLazyLoad.load('../login/login.controller.js');
                     }]
                 }
-            });        
+            }).state("signup", {
+                url: '/signup/',
+                templateUrl: '../signup/signup.html',
+                resolve: { 
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../signup/login.controller.js');
+                    }]
+                }
+            }); ;        
     }]);
 
 app.factory('Resources', ['$resource', function($resource){
@@ -52,6 +59,18 @@ app.factory('Time', [function(){
 }]);
 
 app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $localStorage){
+    function signup(email, password){
+        return $http({
+            method: 'POST',
+            url: 'http://localhost:3000/task-tracker/signup',
+            data: { email: email, password: password }
+        }).then(function success(response){
+            return response;
+        }, function error(response){
+            return response;
+        });
+    }
+
     function login(email, password){        
         return $http({
             method: 'POST',
@@ -104,6 +123,7 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
         return deferred.promise; 
     }
     return { 
+        signup: signup,
         login: login, 
         logout: logout,
         getToken: getToken, 
