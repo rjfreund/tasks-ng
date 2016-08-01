@@ -28,7 +28,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 templateUrl: '../signup/signup.html',
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../signup/login.controller.js');
+                        return $ocLazyLoad.load('../signup/signup.controller.js');
                     }]
                 }
             }); ;        
@@ -59,11 +59,11 @@ app.factory('Time', [function(){
 }]);
 
 app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $localStorage){
-    function signup(email, password){
+    function signup(email, password, first_name, last_name){
         return $http({
             method: 'POST',
             url: 'http://localhost:3000/task-tracker/signup',
-            data: { email: email, password: password }
+            data: { email: email, password: password, first_name: first_name, last_name: last_name }
         }).then(function success(response){
             return response;
         }, function error(response){

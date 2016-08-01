@@ -17,7 +17,7 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 			console.log(response);
 		});
 	};	
-	$scope.checkUserAuthentication = function(){
+	$scope.setUserAuthentication = function(){
 		Security.isUserAuthenticated().then(function(userIsAuthenticated){
 			$scope.isUserAuthenticated = userIsAuthenticated;
 		}, function(userIsNotAuthenticated){
@@ -45,6 +45,6 @@ app.controller("HomeController", ['$scope', '$state', 'Security', '$http', '$q',
 		};
 	};
 
-	$scope.checkUserAuthentication();
+	$scope.setUserAuthentication();
 	$scope.getTasks();	
 }]);
