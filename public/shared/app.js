@@ -31,6 +31,15 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                         return $ocLazyLoad.load('../signup/signup.controller.js');
                     }]
                 }
+            }).state("confirm-signup", {
+                url: '/confirm-signup/:signupId',
+                controller: 'ConfirmSignupController',
+                templateUrl: '../confirm-signup/confirm-signup.html',
+                resolve: { 
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../confirm-signup/confirm-signup.controller.js');
+                    }]
+                }
             }); ;        
     }]);
 
@@ -71,16 +80,22 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
         });
     }
 
+    function loginWithToken(token){
+        var deferred = $q.defer();
+        if (!token){ deferred.reject("Token is null."); return deferred.promise; }
+        $localStorage.token = token;
+        $http.defaults.headers.common["Authorization"] = "Bearer " + $localStorage.token;
+        deferred.resolve($localStorage.token);
+        return deferred.promise;        
+    }
+
     function login(email, password){        
         return $http({
             method: 'POST',
             url: 'http://localhost:3000/task-tracker/login',
             data: { email: email, password: password}
         }).then(function successCallback(response) {
-            if (!response.data.token){ return $q.reject("token not in response data!!!!!"); }
-            $localStorage.token = response.data.token;
-            $http.defaults.headers.common["Authorization"] = "Bearer " + $localStorage.token;            
-            return response.data.token;
+            return loginWithToken(response.data.token);            
         }, function errorCallback(response) {
             if (!response.data){ return "Could not get response from login database."; }            
             return response.data.error;
