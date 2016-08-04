@@ -1,6 +1,6 @@
 var app = angular.module("tasks");
 
-app.controller("ConfirmSignupController", ['$scope', '$stateParams', 'Security', '$state', function($scope, $stateParams, Security, $state){
+app.controller("ConfirmSignupController", ['$scope', '$stateParams', 'Security', '$state', '$http', function($scope, $stateParams, Security, $state, $http){
 	$http({
         method: 'POST',
         url: 'http://localhost:3000/task-tracker/confirm-signup',
