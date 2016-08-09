@@ -15,7 +15,7 @@
 					<td>{{task.name}}</td>
 					<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
 					<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
-					<td><button class="btn btn-default" uib-tooltip="Finish"><i class="fa fa-check-circle" aria-hidden="true"></i></button></td>
+					<td><button class="btn btn-default" uib-tooltip="Finish" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr uib-collapse="collapseQuickAdd">
 					<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
