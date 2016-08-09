@@ -9,33 +9,8 @@
 	<div class="row"><div class="col-lg-12">Recently Completed Tasks</div></div>
 	<div class="row"><div class="col-lg-12">Upcoming Tasks</div></div>
 	<div class="row">
-		<div class="col-lg-12">
-			<p>All Tasks<p>
-			<form ng-submit="quickAddTaskSubmit()">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Assigned Date</th>
-							<th>Due Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="task in tasks">
-							<td>{{task.name}}</td>
-							<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
-							<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
-						</tr>
-						<tr ng-if="displayQuickAdd"">
-							<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</form>
-			<button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
-			<button class="btn btn-default">Add Task</button>
+		<div class="col-lg-12" ui-view="tasks">
+			
 		</div>
 	</div>
 </div>

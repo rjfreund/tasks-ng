@@ -8,13 +8,17 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
         $stateProvider
             .state("home", {
                 url: '/home/',
-                templateUrl: '../home/home.html',
-                requiresAuthentication: true,
-                resolve: { 
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../home/home.controller.js');
-                    }]
-                }                         
+                views: {
+                    '':{
+                        templateUrl: '../home/home.html',                        
+                        resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../home/home.controller.js'); }] }  
+                    }, 
+                    'tasks@home' : {
+                        templateUrl: '../tasks/tasks.html',
+                        resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/tasks.controller.js'); }] }  
+                    }                        
+                },                
+                requiresAuthentication: true                                    
             }).state("login", {
                 url: '/login/',
                 templateUrl: '../login/login.html',
@@ -40,6 +44,14 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                         return $ocLazyLoad.load('../confirm-signup/confirm-signup.controller.js');
                     }]
                 }
+            }).state("tasks", {
+                url: '/tasks',
+                templateUrl: '../tasks/tasks.html',
+                resolve: { 
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../tasks/tasks.controller.js');
+                    }]
+                }              
             }); ;        
     }]);
 

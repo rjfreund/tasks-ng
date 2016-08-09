@@ -1,0 +1,31 @@
+<div ng-controller="TasksController">
+	<p>All Tasks<p>
+	<form ng-submit="quickAddTaskSubmit()">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Assigned Date</th>
+					<th>Due Date</th>
+					<th><!-- buttons --></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="task in tasks">
+					<td>{{task.name}}</td>
+					<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
+					<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
+					<td><button class="btn btn-default" uib-tooltip="Finish"><i class="fa fa-check-circle" aria-hidden="true"></i></button></td>
+				</tr>
+				<tr uib-collapse="collapseQuickAdd">
+					<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
+	<button class="btn btn-default">Add Task</button>
+</div>
