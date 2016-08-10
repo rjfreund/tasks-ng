@@ -15,7 +15,7 @@ app.controller("TasksController", ['$scope', '$state', '$http', '$q', function($
 			console.log(response);
 		});
 	};	
-	$scope.quickAddTaskSubmit = function(){
+	$scope.quickAddTaskSubmit = function(form){
 		console.log($scope.quickAddTask);
 		$http({
 			method: "POST",
@@ -26,6 +26,9 @@ app.controller("TasksController", ['$scope', '$state', '$http', '$q', function($
 				due_date: moment.utc().format()
 			}
 		}).then(function success(response){
+			form.$setPristine();
+			form.$setUntouched();			
+			$scope.quickAddTask = {};	    
 			$scope.getTasks();
 		}), function error(response){
 			console.error(response);
@@ -33,7 +36,15 @@ app.controller("TasksController", ['$scope', '$state', '$http', '$q', function($
 			//also finish reorganizing api routes into schema and table folders
 		};
 	};
+	$scope.delete = function(task, form){
+		$http({
+			method: 'DELETE',
+			url: 'http://localhost:3000/task-tracker/tasks/' + task.id,			
+		}).then(function(response){
+			$scope.getTasks();
+		});
+	};
 	$scope.collapseQuickAdd = true;
 	$scope.toggleQuickAdd = function(){ $scope.collapseQuickAdd = !$scope.collapseQuickAdd; };
-	$scope.getTasks();	
+	$scope.getTasks();
 }])
