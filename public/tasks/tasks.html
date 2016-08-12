@@ -1,33 +1,33 @@
-<div ng-controller="TasksController">
-	<p>All Tasks<p>
-	<form name="form" ng-submit="quickAddTaskSubmit(form)">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Assigned Date</th>
-					<th>Due Date</th>
-					<th><!-- buttons --></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="task in tasks">
-					<td>{{task.name}}</td>
-					<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
-					<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
-					<td><button uib-tooltip="Finish" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button></td>
-					<td><button uib-tooltip="Edit" class="btn btn-default" type="button"></button></td>
-					<td><button uib-tooltip="Delete" ng-click="delete(task, form)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
-				</tr>
-				<tr uib-collapse="collapseQuickAdd">
-					<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			</tbody>
-		</table>
-	</form>
-	<button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
-	<button class="btn btn-default">Add Task</button>
-</div>
+<p>All Tasks<p>
+<form name="form" ng-submit="quickAddTaskSubmit(form)">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Assigned Date</th>
+				<th>Due Date</th>
+				<th><!-- buttons --></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="task in tasks">
+				<td>{{task.name}}</td>
+				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
+				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
+				<td>
+					<button uib-tooltip="Finish" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
+					<button uib-tooltip="Edit" ng-click="edit(task)" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+					<button uib-tooltip="Delete" ng-click="delete(task, form)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+				</td>
+			</tr>
+			<tr uib-collapse="collapseQuickAdd">
+				<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
+<button class="btn btn-default">Add Task</button>

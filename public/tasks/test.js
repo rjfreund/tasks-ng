@@ -1,7 +1,8 @@
 var app = angular.module("tasks");
-app.controller("TasksController", 
+app.controller("TaskDetailController", 
 ['$scope', '$state', '$http', '$q', '$state',
 function($scope, $state, $http, $q, $state){	
+	debugger;
 	$scope.tasks = [];
 	$scope.quickAddTask = {};
 	$scope.getTasks = function(){
@@ -38,7 +39,8 @@ function($scope, $state, $http, $q, $state){
 			//also finish reorganizing api routes into schema and table folders
 		};
 	};
-	$scope.edit = function(task){		
+	$scope.edit = function(task){
+		debugger;
 		$state.go('editTask', {taskId:task.id, task:task});
 	};
 	$scope.delete = function(task, form){

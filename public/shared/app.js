@@ -45,14 +45,27 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state("tasks", {
-                url: '/tasks',
-                templateUrl: '../tasks/tasks.html',
+                url: '/tasks/all',
+                templateUrl: '../tasks/tasks.html',  
+                controller: "TasksController",            
+                requiresAuthentication: true,
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../tasks/tasks.controller.js');
                     }]
                 }              
-            }); ;        
+            }).state('editTask', {
+                url: '/tasks/:taskId',
+                templateUrl: '../task-detail/task-detail.html',  
+                params: {task: null, formMode: 'edit'},                             
+                requiresAuthentication: true,   
+                controller: 'TaskDetailController',
+                resolve: {
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
+                    }]
+                }           
+            });        
     }]);
 
 app.factory('Resources', ['$resource', function($resource){
