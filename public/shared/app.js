@@ -3,17 +3,19 @@ var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize',
 app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
     function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
         $urlRouterProvider.otherwise("/");
-        $resourceProvider.defaults.stripTrailingSlashes = false;        
+        $resourceProvider.defaults.stripTrailingSlashes = true;        
         $locationProvider.html5Mode(true).hashPrefix('!');
         $stateProvider
             .state("home", {
                 url: '/home/',
                 views: {
                     '':{
+                        controller: 'HomeController',
                         templateUrl: '../home/home.html',                        
                         resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../home/home.controller.js'); }] }  
                     }, 
                     'tasks@home' : {
+                        controller: 'TasksController',
                         templateUrl: '../tasks/tasks.html',
                         resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/tasks.controller.js'); }] }  
                     }                        
