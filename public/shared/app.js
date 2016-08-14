@@ -23,6 +23,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 requiresAuthentication: true                                    
             }).state("login", {
                 url: '/login/',
+                controller: 'LoginController',
                 templateUrl: '../login/login.html',
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
@@ -31,6 +32,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 }
             }).state("signup", {
                 url: '/signup/',
+                controller: 'SignupController',
                 templateUrl: '../signup/signup.html',
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
@@ -47,9 +49,9 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state("tasks", {
-                url: '/tasks/all',
-                templateUrl: '../tasks/tasks.html',  
-                controller: "TasksController",            
+                url: '/tasks/',
+                controller: "TasksController",    
+                templateUrl: '../tasks/tasks.html',                      
                 requiresAuthentication: true,
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
@@ -57,11 +59,11 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }              
             }).state('editTask', {
-                url: '/tasks/:taskId',
+                url: '/tasks/:taskId', 
+                controller: 'TaskDetailController',               
                 templateUrl: '../task-detail/task-detail.html',  
                 params: {task: null, formMode: 'edit'},                             
-                requiresAuthentication: true,   
-                controller: 'TaskDetailController',
+                requiresAuthentication: true,                   
                 resolve: {
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
