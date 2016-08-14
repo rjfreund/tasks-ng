@@ -68,8 +68,8 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
                     }]
-                }           
-            });        
+                }
+            });
     }]);
 
 app.factory('Resources', ['$resource', function($resource){

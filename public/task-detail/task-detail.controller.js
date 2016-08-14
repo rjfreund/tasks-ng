@@ -4,4 +4,9 @@ app.controller('TaskDetailController',
 function($scope, $stateParams){	
 	$scope.task = $stateParams.task;
 	$scope.formMode = $stateParams.formMode;
+	$scope.save = function(){
+		if ($scope.formMode === 'edit'){
+			return;
+		}
+	}
 }]);
