@@ -25,6 +25,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 url: '/login/',
                 controller: 'LoginController',
                 templateUrl: '../login/login.html',
+                params: { continueState: null }, 
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../login/login.controller.js');
@@ -142,10 +143,10 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
             return $http({
                 method: 'POST',
                 url: 'http://localhost:3000/task-tracker/verifytoken'                
-            }).then(function(response){
+            }).then(function(response){             
                 return true;
             }, function(error){
-                return false;
+                return $q.reject(error);                
             });
         });
     }
@@ -180,9 +181,16 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
     function($rootScope, $location, $state, $anchorScroll, Security){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
             if (!toState.requiresAuthentication){ return; }
-            Security.isUserAuthenticated().then(function(userIsAuthenicated){                 
-                //continue going to state         
-            }, function(userIsNotAuthenicated){
+            //to prevent infinite loops
+            if (toState.shouldNotRetry){                
+                toState.shouldNotRetry = false;
+                return;
+            }
+            event.preventDefault();
+            Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
+                toState.shouldNotRetry = true;
+                $state.go(toState);
+            }, function(error){
                 $state.go('login');
             });
         });    
