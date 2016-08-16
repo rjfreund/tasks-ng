@@ -1,4 +1,4 @@
-var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'oc.lazyLoad', 'chart.js', 'ngStorage']);
+var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'mwl.calendar', 'oc.lazyLoad', 'chart.js', 'ngStorage']);
 
 app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
     function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
@@ -19,8 +19,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                         templateUrl: '../tasks/tasks.html',
                         resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/tasks.controller.js'); }] }  
                     }                        
-                },                
-                requiresAuthentication: true                                    
+                }                                            
             }).state("login", {
                 url: '/login/',
                 controller: 'LoginController',
@@ -52,19 +51,26 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             }).state("tasks", {
                 url: '/tasks/',
                 controller: "TasksController",    
-                templateUrl: '../tasks/tasks.html',                      
-                requiresAuthentication: true,
+                templateUrl: '../tasks/tasks.html',                                      
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../tasks/tasks.controller.js');
                     }]
                 }              
+            }).state('task-calendar', {
+                url: '/tasks/calendar',
+                controller: 'TaskCalendarController',
+                templateUrl: '../task-calendar/task-calendar.html',
+                resolve: {
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../task-calendar/task-calendar.controller.js');
+                    }]
+                }
             }).state('editTask', {
                 url: '/tasks/:taskId', 
                 controller: 'TaskDetailController',               
                 templateUrl: '../task-detail/task-detail.html',  
-                params: {task: null, formMode: 'edit'},                             
-                requiresAuthentication: true,                   
+                params: {task: null, formMode: 'edit'},                                                         
                 resolve: {
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
@@ -179,10 +185,9 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
 
 app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
     function($rootScope, $location, $state, $anchorScroll, Security){
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-            if (!toState.requiresAuthentication){ return; }
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
             //to prevent infinite loops
-            if (toState.shouldNotRetry){                
+            if (toState.shouldNotRetry){
                 toState.shouldNotRetry = false;
                 return;
             }
