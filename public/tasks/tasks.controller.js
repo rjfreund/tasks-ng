@@ -34,13 +34,8 @@ function($scope, $state, $http, $q, $state){
 			$scope.getTasks();
 		}), function error(response){
 			console.error(response);
-			//TODO: need to add user_id to the post of the task in api
-			//also finish reorganizing api routes into schema and table folders
 		};
-	};
-	$scope.edit = function(task){		
-		$state.go('editTask', {taskId:task.id, task:task});
-	};
+	};	
 	$scope.delete = function(task, form){
 		$http({
 			method: 'DELETE',

@@ -25,6 +25,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 controller: 'LoginController',
                 templateUrl: '../login/login.html',
                 params: { continueState: null }, 
+                allowAnonymous: true,
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../login/login.controller.js');
@@ -64,6 +65,16 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 resolve: {
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../task-calendar/task-calendar.controller.js');
+                    }]
+                }
+            }).state('addTask', {
+                url: '/tasks/add',
+                controller: 'TaskDetailController',
+                templateUrl: '../task-detail/task-detail.html',  
+                params: {task: {}, formMode: 'add'},                                                         
+                resolve: {
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
                     }]
                 }
             }).state('editTask', {
@@ -186,11 +197,9 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
 app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
     function($rootScope, $location, $state, $anchorScroll, Security){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
+            if (toState.allowAnonymous){ return; }
             //to prevent infinite loops
-            if (toState.shouldNotRetry){
-                toState.shouldNotRetry = false;
-                return;
-            }
+            if (toState.shouldNotRetry){ toState.shouldNotRetry = false; return; }
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
                 toState.shouldNotRetry = true;

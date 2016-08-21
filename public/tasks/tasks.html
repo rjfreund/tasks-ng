@@ -16,7 +16,7 @@
 				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
 				<td>
 					<button uib-tooltip="Finish" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
-					<button uib-tooltip="Edit" ng-click="edit(task)" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+					<a uib-tooltip="Edit" ui-sref="editTask({taskId:task.id, task:task})" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 					<button uib-tooltip="Delete" ng-click="delete(task, form)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
 				</td>
 			</tr>
@@ -30,4 +30,4 @@
 	</table>
 </form>
 <button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
-<button class="btn btn-default">Add Task</button>
+<a class="btn btn-default" ui-sref="addTask">Add Task</a>
