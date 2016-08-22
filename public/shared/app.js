@@ -203,7 +203,7 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
                 toState.shouldNotRetry = true;
-                $state.go(toState);
+                $state.go(toState, toParams);
             }, function(error){
                 $state.go('login');
             });
