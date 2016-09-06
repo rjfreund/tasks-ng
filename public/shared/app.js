@@ -81,7 +81,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 url: '/tasks/:taskId', 
                 controller: 'TaskDetailController',               
                 templateUrl: '../task-detail/task-detail.html',  
-                params: {task: null, formMode: 'edit'},                                                         
+                params: {formMode: 'edit'},                                                         
                 resolve: {
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
@@ -192,8 +192,17 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
     };
 }]);
 
-app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
-    function($rootScope, $location, $state, $anchorScroll, Security){
+app.factory('PrevState', ['$state', function($state){
+    var fromState;
+    var fromParams;
+    return {
+        set: function(input_fromState, input_fromParams){ fromState = input_fromState; fromParams = input_fromParams },
+        go: function(){ $state.go(fromState, fromParams); }
+    };
+}]);
+
+app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'PrevState',
+    function($rootScope, $location, $state, $anchorScroll, Security, PrevState){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
             if (toState.allowAnonymous){ return; }
             //to prevent infinite loops
@@ -201,8 +210,10 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security',
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
                 toState.shouldNotRetry = true;
+                PrevState.set(fromState, fromParams);
                 $state.go(toState, toParams);
             }, function(error){
+                PrevState.set(fromState, fromParams);
                 $state.go('login');
             });
         });    
