@@ -21,7 +21,7 @@ function($scope, $state, $http, $q, $state, apiHost){
 		console.log($scope.quickAddTask);
 		$http({
 			method: "POST",
-			url: "http://localhost:3000/task-tracker/tasks",
+			url: apiHost + "/task-tracker/tasks",
 			data: {
 				name: $scope.quickAddTask.name,
 				assigned_date: moment.utc().format(), //TODO: get date.now as utc

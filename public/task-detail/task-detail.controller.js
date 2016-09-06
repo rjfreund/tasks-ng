@@ -1,7 +1,7 @@
 var app = angular.module("tasks");
 app.controller('TaskDetailController', 
-['$scope', '$stateParams',
-function($scope, $stateParams){	
+['$scope', '$stateParams', 'apiHost',
+function($scope, $stateParams, apiHost){	
 	$scope.task = $stateParams.task;
 	$scope.formMode = $stateParams.formMode;
 	$scope.save = function(){
@@ -12,7 +12,7 @@ function($scope, $stateParams){
 		if ($scope.formMode === 'add'){
 			$http({
 			method: "POST",
-			url: "http://localhost:3000/task-tracker/tasks",
+			url: apiHost + "/task-tracker/tasks",
 			data: {
 				name: $scope.task.name,
 				assigned_date: moment.utc().format(),
