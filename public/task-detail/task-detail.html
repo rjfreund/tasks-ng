@@ -13,15 +13,51 @@
 	    </div>
 	  </div>
 	  <div class="form-group">
+	    <label for="taskAssignedDate" class="col-sm-2 control-label">Assigned Date</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.assigned_date" type="datetime-local" class="form-control" id="taskAssignedDate">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="taskDueDate" class="col-sm-2 control-label">Due Date</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.due_date" type="datetime-local" class="form-control" id="taskDueDate">
+	    </div>
+	  </div>
+	  <div class="form-group">
 	    <label for="taskIsComplete" class="col-sm-2 control-label">Is Complete</label>
 	    <div class="col-sm-10">
 	      <input ng-model="task.is_complete" type="checkbox" id="taskIsComplete" placeholder="Details">
 	    </div>
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" ng-if="formMode !== 'add'">
 	    <label for="taskCreationDate" class="col-sm-2 control-label">Creation Date</label>
 	    <div class="col-sm-10">
-	      <input ng-model="task.is_complete" type="text" class="form-control" id="taskCreationDate" placeholder="Details">
+	      <input ng-model="task.creation_date" type="datetime-local" class="form-control" id="taskCreationDate" readonly>
+	    </div>
+	  </div>
+	  <div class="form-group" ng-if="formMode !== 'add'">
+	    <label for="taskCreationDate" class="col-sm-2 control-label">Modified Date</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.modified_date" type="datetime-local" class="form-control" id="taskModifiedDate" readonly>
+	    </div>
+	  </div>
+	  <div class="form-group" ng-if="formMode !== 'add'">
+	    <label for="taskUser" class="col-sm-2 control-label">User</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.user_id" type="number" class="form-control" id="taskUser" readonly>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="taskLocation" class="col-sm-2 control-label">Location</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.location" type="text" class="form-control" id="taskLocation">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="taskIsSkipped" class="col-sm-2 control-label">Is Skipped</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.is_skipped" type="checkbox" id="taskIsSkipped" placeholder="Details">
 	    </div>
 	  </div>
 	  <div class="form-group">

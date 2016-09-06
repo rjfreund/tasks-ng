@@ -2,7 +2,7 @@ var app = angular.module("tasks");
 app.controller('TaskDetailController', 
 ['$scope', '$stateParams', 'apiHost',
 function($scope, $stateParams, apiHost){	
-	$scope.task = $stateParams.task;
+	$scope.task = formatTask($stateParams.task);
 	$scope.formMode = $stateParams.formMode;
 	$scope.save = function(){
 		if ($scope.formMode === 'edit'){
@@ -28,5 +28,8 @@ function($scope, $stateParams, apiHost){
 			};
 			return;
 		}
+	}
+	function formatTask(task){
+		if (task.creation_date){}
 	}
 }]);
