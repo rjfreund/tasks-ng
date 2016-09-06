@@ -143,8 +143,7 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
         }).then(function successCallback(response) {
             return loginWithToken(response.data.token);            
         }, function errorCallback(response) {
-            if (!response.data){ return "Could not get response from login database."; }            
-            return response.data.error;
+            return $q.reject(response);  
         });        
     }
 

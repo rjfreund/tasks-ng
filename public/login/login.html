@@ -13,4 +13,9 @@
     </label>
   </div>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+  <div class="alert alert-danger" role="alert" ng-if="error">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{error}}
+  </div>
 </form>

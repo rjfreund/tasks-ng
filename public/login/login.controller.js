@@ -1,7 +1,8 @@
 var app = angular.module('tasks');
 
 app.controller("LoginController", ['$scope', '$state', 'Security', '$stateParams',
-    function($scope, $state, Security, $stateParams) {          
+function($scope, $state, Security, $stateParams) {               
+    $scope.error = '';
     $scope.login = function(credentials){
         if (!credentials.email){ alert("Email is invalid."); return; }
         if (!credentials.password){ alert("Password is invalid"); return; }
@@ -13,7 +14,7 @@ app.controller("LoginController", ['$scope', '$state', 'Security', '$stateParams
             }
             $state.go('home');
         }, function(error){
-            alert(error);
+            $scope.error = error.data;
         });
     };
 }]);
