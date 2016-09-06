@@ -42,6 +42,8 @@ function($scope, $state, $http, $q, $state, apiHost){
 			url: apiHost + '/task-tracker/tasks/' + task.id,			
 		}).then(function(response){
 			$scope.getTasks();
+		}, function(response){
+			console.log(response);
 		});
 	};
 	$scope.collapseQuickAdd = true;
