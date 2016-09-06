@@ -1,13 +1,13 @@
 var app = angular.module("tasks");
 app.controller("TasksController", 
-['$scope', '$state', '$http', '$q', '$state',
-function($scope, $state, $http, $q, $state){	
+['$scope', '$state', '$http', '$q', '$state', 'apiHost',
+function($scope, $state, $http, $q, $state, apiHost){	
 	$scope.tasks = [];
 	$scope.quickAddTask = {};
 	$scope.getTasks = function(){
 		var options = {
 		  method: 'GET',
-		  url: 'http://localhost:3000/task-tracker/tasks/'
+		  url: apiHost + '/task-tracker/tasks/'
 		};
 		$http(options).then(function success(response){
 			console.log(response);
@@ -39,7 +39,7 @@ function($scope, $state, $http, $q, $state){
 	$scope.delete = function(task, form){
 		$http({
 			method: 'DELETE',
-			url: 'http://localhost:3000/task-tracker/tasks/' + task.id,			
+			url: apiHost + '/task-tracker/tasks/' + task.id,			
 		}).then(function(response){
 			$scope.getTasks();
 		});

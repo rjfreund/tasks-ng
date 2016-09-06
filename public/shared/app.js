@@ -108,17 +108,16 @@ app.factory('Resources', ['$resource', function($resource){
     
 }]);
 
-app.factory('Time', [function(){
-    function getTimezone(){
-        
-    }
+app.factory('apiHost', ['$location', function($location){
+    if ($location.host().indexOf('localhost') > -1){ return 'http://localhost:3000'; }
+    return 'http://api.rjfreund.com';
 }]);
 
-app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $localStorage){
+app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($http, $q, $localStorage, apiHost){
     function signup(email, password, first_name, last_name){
         return $http({
             method: 'POST',
-            url: 'http://localhost:3000/task-tracker/signup',
+            url:  apiHost + '/task-tracker/signup',
             data: { email: email, password: password, first_name: first_name, last_name: last_name }
         }).then(function success(response){
             return response;
@@ -139,7 +138,7 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
     function login(email, password){        
         return $http({
             method: 'POST',
-            url: 'http://localhost:3000/task-tracker/login',
+            url: apiHost + '/task-tracker/login',
             data: { email: email, password: password}
         }).then(function successCallback(response) {
             return loginWithToken(response.data.token);            
@@ -159,7 +158,7 @@ app.factory("Security", ['$http','$q', '$localStorage', function($http, $q, $loc
         .then(function(token) {
             return $http({
                 method: 'POST',
-                url: 'http://localhost:3000/task-tracker/verifytoken'                
+                url: apiHost + '/task-tracker/verifytoken'                
             }).then(function(response){             
                 return true;
             }, function(error){
