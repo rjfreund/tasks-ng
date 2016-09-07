@@ -11,6 +11,7 @@ function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state){
 			console.error(res);
 		});
 	}	
+	$scope.getDaysLeft = function(task){ return moment(task.due_date).diff(moment(), 'days'); };
 	$scope.formMode = $stateParams.formMode;
 	$scope.save = function(){
 		if ($scope.formMode === 'edit'){

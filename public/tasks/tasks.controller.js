@@ -4,10 +4,7 @@ app.controller("TasksController",
 function($scope, $state, $http, $q, $state, apiHost){	
 	$scope.tasks = [];
 	$scope.quickAddTask = {};
-	$scope.daysLeft = function(task){
-		//return moment().diff(task.due_date, 'days');
-		return moment(task.due_date).diff(moment(), 'days');
-	};
+	$scope.getDaysLeft = function(task){ return moment(task.due_date).diff(moment(), 'days'); };
 	$scope.getTasks = function(){
 		var options = {
 		  method: 'GET',
