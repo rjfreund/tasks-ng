@@ -6,6 +6,7 @@
 				<th>Name</th>
 				<th>Assigned Date</th>
 				<th>Due Date</th>
+				<th>Days Left</th>
 				<th><!-- buttons --></th>
 			</tr>
 		</thead>
@@ -14,6 +15,7 @@
 				<td>{{task.name}}</td>
 				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
 				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
+				<td>{{daysLeft(task)}}</td>
 				<td>
 					<button uib-tooltip="Finish" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
 					<a uib-tooltip="Edit" ui-sref="editTask({taskId:task.id})" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -22,6 +24,7 @@
 			</tr>
 			<tr uib-collapse="collapseQuickAdd">
 				<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
+				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
