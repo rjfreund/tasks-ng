@@ -130,6 +130,14 @@ app.factory('DatetimeFormatter', [function(){
                 returnObject[properties[i]] = moment(returnObject[properties[i]]).toDate();
             }            
             return returnObject;
+        },
+        toDatetimeLocal: function(object, properties){
+            var returnObject = angular.copy(object);
+            for (var i = 0; i < properties.length; i++){ 
+                if (!returnObject.hasOwnProperty(properties[i])){ continue; }
+                returnObject[properties[i]] = new Date(moment(returnObject[properties[i]]).format('MM/DD/YYYY hh:mm a'));
+            }            
+            return returnObject;
         }
     };
 }]);

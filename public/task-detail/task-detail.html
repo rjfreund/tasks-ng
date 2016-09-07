@@ -15,8 +15,11 @@
 	  <div class="form-group">
 	    <label for="taskAssignedDate" class="col-sm-2 control-label">Assigned Date</label>
 	    <div class="col-sm-10">
-	      <input ng-model="task.assigned_date" type="datetime-local" class="form-control" id="taskAssignedDate">
-	    </div>
+	    	<div class="input-group">
+	    		<input ng-model="task.assigned_date" type="datetime-local" class="form-control" id="taskAssignedDate">
+	      		<div class="input-group-btn"><button type="button" class="btn btn-default" ng-click="setAssignedDateToToday(task)">Today</button></div>
+	    	</div>	      
+	    </div>	    	    
 	  </div>
 	  <div class="form-group">
 	    <label for="taskDueDate" class="col-sm-2 control-label">Due Date</label>

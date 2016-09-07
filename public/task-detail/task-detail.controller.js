@@ -11,6 +11,9 @@ function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state){
 			console.error(res);
 		});
 	}	
+	$scope.setAssignedDateToToday = function(task){
+		task.assigned_date = new Date(moment().format('MM/DD/YYYY hh:mm a'));
+	};
 	$scope.getDaysLeft = function(task){ return moment(task.due_date).diff(moment(), 'days'); };
 	$scope.formMode = $stateParams.formMode;
 	$scope.save = function(){
