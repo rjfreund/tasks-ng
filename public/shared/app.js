@@ -113,6 +113,27 @@ app.factory('apiHost', ['$location', function($location){
     return 'http://api.rjfreund.com';
 }]);
 
+app.factory('DatetimeFormatter', [function(){
+    return {
+        toUTC: function(object, properties){
+            var returnObject = angular.copy(object);
+            for (var i = 0; i < properties.length; i++){ 
+                if (!returnObject.hasOwnProperty(properties[i])){ continue; }
+                returnObject[properties[i]] = moment.utc(returnObject[properties[i]]).format();
+            }            
+            return returnObject;
+        },
+        toLocal: function(object, properties){
+            var returnObject = angular.copy(object);
+            for (var i = 0; i < properties.length; i++){ 
+                if (!returnObject.hasOwnProperty(properties[i])){ continue; }
+                returnObject[properties[i]] = moment(returnObject[properties[i]]).toDate();
+            }            
+            return returnObject;
+        }
+    };
+}]);
+
 app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($http, $q, $localStorage, apiHost){
     function signup(email, password, first_name, last_name){
         return $http({
@@ -210,10 +231,10 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'Prev
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
                 toState.shouldNotRetry = true;
-                PrevState.set(fromState, fromParams);
+                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
                 $state.go(toState, toParams);
             }, function(error){
-                PrevState.set(fromState, fromParams);
+                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
                 $state.go('login');
             });
         });    

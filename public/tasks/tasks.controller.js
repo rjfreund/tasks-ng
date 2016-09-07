@@ -9,12 +9,10 @@ function($scope, $state, $http, $q, $state, apiHost){
 		  method: 'GET',
 		  url: apiHost + '/task-tracker/tasks/'
 		};
-		$http(options).then(function success(response){
-			console.log(response);
+		$http(options).then(function success(response){			
 			$scope.tasks = response.data;
-		}, function error(response){
-			console.log("error");
-			console.log(response);
+		}, function error(response){			
+			console.error(response);
 		});
 	};	
 	$scope.quickAddTaskSubmit = function(form){
