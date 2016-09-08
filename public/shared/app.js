@@ -2,7 +2,7 @@ var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize',
 
 app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
     function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/todo/");
         $resourceProvider.defaults.stripTrailingSlashes = false;        
         $locationProvider.html5Mode(true).hashPrefix('!');
         $stateProvider
