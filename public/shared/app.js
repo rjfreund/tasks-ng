@@ -2,12 +2,12 @@ var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize',
 
 app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
     function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
-        $urlRouterProvider.otherwise("/todo/");
+        $urlRouterProvider.otherwise("/tasks/todo/");
         $resourceProvider.defaults.stripTrailingSlashes = false;        
         $locationProvider.html5Mode(true).hashPrefix('!');
         $stateProvider
             .state("todo", {
-                url: '/todo/',                
+                url: '/tasks/todo/',                
                 controller: 'TasksController',                        
                 templateUrl: '../tasks/tasks.html',
                 params: { 
