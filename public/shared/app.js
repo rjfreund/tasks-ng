@@ -36,7 +36,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state("confirm-signup", {
-                url: '/confirm-signup/:signupId',
+                url: '/confirm-signup/:signupId/',
                 controller: 'ConfirmSignupController',
                 templateUrl: '../confirm-signup/confirm-signup.html',
                 resolve: { 
@@ -54,7 +54,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }              
             }).state("completedTasks", {
-                url: '/tasks/completed',
+                url: '/tasks/completed/',
                 controller: "TasksController",    
                 templateUrl: '../tasks/tasks.html',
                 params: { 
@@ -64,7 +64,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 },                                      
                 resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/tasks.controller.js'); }] }              
             }).state('taskCalendar', {
-                url: '/tasks/calendar',
+                url: '/tasks/calendar/',
                 controller: 'TaskCalendarController',
                 templateUrl: '../task-calendar/task-calendar.html',
                 resolve: {
@@ -73,7 +73,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state('addTask', {
-                url: '/tasks/add',
+                url: '/tasks/add/',
                 controller: 'TaskDetailController',
                 templateUrl: '../task-detail/task-detail.html',  
                 params: {task: {}, formMode: 'add'},                                                         
@@ -83,7 +83,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state('editTask', {
-                url: '/tasks/:taskId', 
+                url: '/tasks/:taskId/', 
                 controller: 'TaskDetailController',               
                 templateUrl: '../task-detail/task-detail.html',  
                 params: {formMode: 'edit'},                                                         
@@ -268,19 +268,27 @@ app.factory('PrevState', ['$state', function($state){
     };
 }]);
 
-app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'PrevState',
-    function($rootScope, $location, $state, $anchorScroll, Security, PrevState){
+app.factory('NavBarManager', [function(){
+    return {
+        showNavBar: false
+    };
+}]);
+
+app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'PrevState', 'NavBarManager',
+    function($rootScope, $location, $state, $anchorScroll, Security, PrevState, NavBarManager){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
-            if (toState.allowAnonymous){ return; }
+            if (toState.allowAnonymous){ NavBarManager.showNavBar = false; return; }
             //to prevent infinite loops
             if (toState.shouldNotRetry){ toState.shouldNotRetry = false; return; }
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
                 toState.shouldNotRetry = true;
+                NavBarManager.showNavBar = true;
                 if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
                 $state.go(toState, toParams);
             }, function(error){
-                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
+                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }    
+                NavBarManager.showNavBar = false;            
                 $state.go('login');
             });
         });    
