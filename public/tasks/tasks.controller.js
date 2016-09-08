@@ -1,16 +1,19 @@
 var app = angular.module("tasks");
 app.controller("TasksController", 
-['$scope', '$state', '$http', '$q', '$state', 'apiHost',
-function($scope, $state, $http, $q, $state, apiHost){	
+['$scope', '$state', '$http', '$q', '$state', 'apiHost', '$stateParams', 'TaskActions',
+function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskActions){	
 	$scope.tasks = [];
 	$scope.quickAddTask = {};
-	$scope.getDaysLeft = function(task){ return moment(task.due_date).diff(moment(), 'days'); };
+	$scope.completeTask = function(task){ 
+		task.is_complete = true; 
+		TaskActions.setCompletionDate(task);
+		TaskActions.saveEdit(task).then(function success(res){ $scope.getTasks(); }, function fail(res){ console.error(res); });		
+	};
+	$scope.areAddTaskButtonsHidden = function(){ if($stateParams.areAddTaskButtonsHidden){ return $stateParams.areAddTaskButtonsHidden; } return false; };	
+	$scope.getDaysLeft = function(task){ if(moment(task.due_date).isValid()){ return moment(task.due_date).diff(moment(), 'days'); } };
 	$scope.getTasks = function(){
-		var options = {
-		  method: 'GET',
-		  url: apiHost + '/task-tracker/tasks/'
-		};
-		$http(options).then(function success(response){			
+		TaskActions.getTasks($stateParams.filter, $stateParams.orderBy)
+		.then(function success(response){			
 			$scope.tasks = response.data;
 		}, function error(response){			
 			console.error(response);
@@ -35,11 +38,9 @@ function($scope, $state, $http, $q, $state, apiHost){
 			console.error(response);
 		};
 	};	
-	$scope.delete = function(task, form){
-		$http({
-			method: 'DELETE',
-			url: apiHost + '/task-tracker/tasks/' + task.id,			
-		}).then(function(response){
+	$scope.delete = function(task){
+		TaskActions.deleteTask(task)
+		.then(function(response){
 			$scope.getTasks();
 		}, function(response){
 			console.log(response);

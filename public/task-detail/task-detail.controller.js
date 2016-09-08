@@ -1,51 +1,45 @@
 var app = angular.module("tasks");
 app.controller('TaskDetailController', 
-['$scope', '$stateParams', 'apiHost', '$http', 'DatetimeFormatter', '$state',
-function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state){		
+['$scope', '$stateParams', 'apiHost', '$http', 'DatetimeFormatter', '$state', 'PrevState', 'TaskActions',
+function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state, PrevState, TaskActions){		
 	$scope.task = {};
 	if ($stateParams.formMode === 'edit' || $stateParams.formMode === 'view'){
-		$http({method: "GET", url: apiHost + "/task-tracker/tasks/{id:'" + $stateParams.taskId + "'}"})
+		TaskActions.getSingleTask($stateParams.taskId)
 		.then(function success(res){
-			$scope.task = DatetimeFormatter.toLocal(res.data[0], ['creation_date', 'modified_date', 'assigned_date', 'due_date']);
+			$scope.task = DatetimeFormatter.toLocal(res.data[0], ['creation_date', 'modified_date', 'assigned_date', 'due_date', 'completion_date']);
+			console.log($scope.task);
 		}, function fail(res){
 			console.error(res);
 		});
 	}	
-	$scope.setAssignedDateToToday = function(task){
-		task.assigned_date = new Date(moment().format('MM/DD/YYYY hh:mm a'));
-	};
+	$scope.setCompletionDate = function(task){ TaskActions.setCompletionDate(task); };
+	$scope.setAssignedDateToToday = function(task){ TaskActions.setAssignedDateToToday(task); }
 	$scope.getDaysLeft = function(task){ return moment(task.due_date).diff(moment(), 'days'); };
 	$scope.formMode = $stateParams.formMode;
-	$scope.save = function(){
+	$scope.save = function(){		
 		if ($scope.formMode === 'edit'){
-			$http({
-				method: "PUT",
-				url: apiHost + "/task-tracker/tasks/" + $stateParams.taskId,
-				data: DatetimeFormatter.toUTC($scope.task, ['creation_date', 'modified_date', 'assigned_date', 'due_date'])
-			}).then(function success(res){
+			TaskActions.saveEdit($scope.task)
+			.then(function success(res){
 				$scope.form.$setPristine();
 				$scope.form.$setUntouched();
-				$state.go('tasks');
+				PrevState.go();
 			}, function fail(res){
 				console.error(res);
 			});
 			return;
 		}
 		if ($scope.formMode === 'add'){
-			$http({
-				method: "POST",
-				url: apiHost + "/task-tracker/tasks",
-				data: DatetimeFormatter.toUTC($scope.task, ['creation_date', 'modified_date', 'assigned_date', 'due_date'])
-			}).then(function success(response){
+			TaskActions.saveAdd($scope.task)
+			.then(function success(response){
 				$scope.form.$setPristine();
 				$scope.form.$setUntouched();			
 				$scope.task = {};		
-				$state.go('tasks');		
+				PrevState.go();	
 			}), function error(response){
 				console.error(response);
 			};
 			return;
 		}
 	}
-	$scope.cancel = function(){ $state.go('tasks'); }	
+	$scope.cancel = function(){ PrevState.go(); }
 }]);

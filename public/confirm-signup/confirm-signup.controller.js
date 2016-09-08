@@ -8,7 +8,7 @@ app.controller("ConfirmSignupController", ['$scope', '$stateParams', 'Security',
     }).then(function success(response){
     	Security.loginWithToken(response.data.token)
     	.then(function(token){
-    		$state.go('home');
+    		$state.go('todo');
     	});
     }, function fail(response){
     	console.error(response);

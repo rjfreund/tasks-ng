@@ -12,7 +12,7 @@ function($scope, $state, Security, $stateParams) {
                 $state.go($stateParams.continueState); 
                 return;
             }
-            $state.go('home');
+            $state.go('todo');
         }, function(error){
             $scope.error = error.data;
         });

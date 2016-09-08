@@ -36,7 +36,13 @@
 	  <div class="form-group">
 	    <label for="taskIsComplete" class="col-sm-2 control-label">Is Complete</label>
 	    <div class="col-sm-10">
-	      <input ng-model="task.is_complete" type="checkbox" id="taskIsComplete" placeholder="Details">
+	      <input ng-model="task.is_complete" ng-change="setCompletionDate(task)" type="checkbox" id="taskIsComplete" placeholder="Details">
+	    </div>
+	  </div>
+	  <div class="form-group" ng-if="task.is_complete">
+	    <label for="taskCompletionDate" class="col-sm-2 control-label">Completion Date</label>
+	    <div class="col-sm-10">
+	      <input ng-model="task.completion_date" type="datetime-local" class="form-control" id="taskCompletionDate">
 	    </div>
 	  </div>
 	  <div class="form-group" ng-if="formMode !== 'add'">
