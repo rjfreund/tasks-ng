@@ -1,7 +1,7 @@
 var app = angular.module('tasks');
 
-app.controller("TaskCalendarController", ['$scope', '$http', 'TaskActions', '$state', 
-function($scope, $http, TaskActions, $state){
+app.controller("TaskCalendarController", ['$scope', '$http', 'TaskManager', '$state', 
+function($scope, $http, TaskManager, $state){
 	$scope.calendarView = 'month';
 	$scope.hasCalendarBeenLoaded =false;
 	$scope.viewDate = new Date();
@@ -31,7 +31,7 @@ function($scope, $http, TaskActions, $state){
 	];
 	$scope.events = [];
 	$scope.getEvents = function(){ 		
-		TaskActions.getTasks({is_complete: false})
+		TaskManager.getTasks({is_complete: false})
 		.then(function success(response){			
 			$scope.events = response.data.map(function(task){
 				return {

@@ -1,19 +1,19 @@
 var app = angular.module("tasks");
 app.controller("TasksController", 
-['$scope', '$state', '$http', '$q', '$state', 'apiHost', '$stateParams', 'TaskActions', '$uibModal',
-function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskActions, $uibModal){	
+['$scope', '$state', '$http', '$q', '$state', 'apiHost', '$stateParams', 'TaskManager', '$uibModal',
+function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskManager, $uibModal){	
 	$scope.tasks = [];
 	$scope.haveTasksBeenLoaded = false;
 	$scope.quickAddTask = {};
 	$scope.completeTask = function(task){ 
 		task.is_complete = true; 
-		TaskActions.setCompletionDate(task);
-		TaskActions.saveEdit(task).then(function success(res){ $scope.getTasks(); }, function fail(res){ console.error(res); });		
+		TaskManager.setCompletionDate(task);
+		TaskManager.saveEdit(task).then(function success(res){ $scope.getTasks(); }, function fail(res){ console.error(res); });		
 	};
 	$scope.areAddTaskButtonsHidden = function(){ if($stateParams.areAddTaskButtonsHidden){ return $stateParams.areAddTaskButtonsHidden; } return false; };	
 	$scope.getDaysLeft = function(task){ if(moment(task.due_date).isValid()){ return moment(task.due_date).diff(moment(), 'days'); } };
 	$scope.getTasks = function(){
-		TaskActions.getTasks($stateParams.filter, $stateParams.orderBy)
+		TaskManager.getTasks($stateParams.filter, $stateParams.orderBy)
 		.then(function success(response){			
 			$scope.tasks = response.data;
 			$scope.haveTasksBeenLoaded = true;

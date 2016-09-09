@@ -142,7 +142,22 @@ app.factory('DatetimeFormatter', [function(){
     };
 }]);
 
-app.factory('TaskActions', ['$q', 'apiHost', 'DatetimeFormatter', '$http', function($q, apiHost, DatetimeFormatter, $http){
+app.factory('CategoryManager', ['$q', 'apiHost', 'DatetimeFormatter', '$http', function($q, apiHost, DatetimeFormatter, $http){
+    return {
+        getCategories: function(filter, orderBy){ 
+            var options = {
+              method: 'GET',
+              url: apiHost + '/task-tracker/categories/',
+              params: {}
+            };
+            if (filter){ options.params.filter = filter; }
+            if (orderBy){ options.params.orderBy = orderBy; }
+            return $http(options);
+        }
+    };
+}]);
+
+app.factory('TaskManager', ['$q', 'apiHost', 'DatetimeFormatter', '$http', function($q, apiHost, DatetimeFormatter, $http){
     return {
         getSingleTask: function(taskId){ return $http({method: "GET", url: apiHost + "/task-tracker/tasks/", params: { filter: {id: taskId} } }) },
         getTasks: function(filter, orderBy){ 

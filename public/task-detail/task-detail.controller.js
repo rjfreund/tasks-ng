@@ -1,10 +1,10 @@
 var app = angular.module("tasks");
 app.controller('TaskDetailController', 
-['$scope', '$stateParams', 'apiHost', '$http', 'DatetimeFormatter', '$state', 'PrevState', 'TaskActions',
-function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state, PrevState, TaskActions){		
+['$scope', '$stateParams', 'apiHost', '$http', 'DatetimeFormatter', '$state', 'PrevState', 'TaskManager',
+function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state, PrevState, TaskManager){		
 	$scope.task = {};
 	if ($stateParams.formMode === 'edit' || $stateParams.formMode === 'view'){
-		TaskActions.getSingleTask($stateParams.taskId)
+		TaskManager.getSingleTask($stateParams.taskId)
 		.then(function success(res){
 			$scope.task = DatetimeFormatter.toLocal(res.data[0], ['creation_date', 'modified_date', 'assigned_date', 'due_date', 'completion_date']);
 			console.log($scope.task);
@@ -12,15 +12,15 @@ function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state, PrevSt
 			console.error(res);
 		});
 	}	
-	$scope.setCompletionDate = function(task){ TaskActions.setCompletionDate(task); };
-	$scope.setAssignedDateToToday = function(task){ TaskActions.setAssignedDateToToday(task); }
+	$scope.setCompletionDate = function(task){ TaskManager.setCompletionDate(task); };
+	$scope.setAssignedDateToToday = function(task){ TaskManager.setAssignedDateToToday(task); }
 	$scope.getDaysLeft = function(task){ 
 		if (!moment(task.due_date).isValid()){ return ""; }
 		return moment(task.due_date).diff(moment(), 'days'); };
 	$scope.formMode = $stateParams.formMode;
 	$scope.save = function(){		
 		if ($scope.formMode === 'edit'){
-			TaskActions.saveEdit($scope.task)
+			TaskManager.saveEdit($scope.task)
 			.then(function success(res){
 				$scope.form.$setPristine();
 				$scope.form.$setUntouched();
@@ -31,7 +31,7 @@ function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state, PrevSt
 			return;
 		}
 		if ($scope.formMode === 'add'){
-			TaskActions.saveAdd($scope.task)
+			TaskManager.saveAdd($scope.task)
 			.then(function success(response){
 				$scope.form.$setPristine();
 				$scope.form.$setUntouched();			
