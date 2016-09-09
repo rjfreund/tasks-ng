@@ -14,7 +14,9 @@ function($scope, $stateParams, apiHost, $http, DatetimeFormatter, $state, PrevSt
 	}	
 	$scope.setCompletionDate = function(task){ TaskActions.setCompletionDate(task); };
 	$scope.setAssignedDateToToday = function(task){ TaskActions.setAssignedDateToToday(task); }
-	$scope.getDaysLeft = function(task){ return moment(task.due_date).diff(moment(), 'days'); };
+	$scope.getDaysLeft = function(task){ 
+		if (!moment(task.due_date).isValid()){ return ""; }
+		return moment(task.due_date).diff(moment(), 'days'); };
 	$scope.formMode = $stateParams.formMode;
 	$scope.save = function(){		
 		if ($scope.formMode === 'edit'){

@@ -45,7 +45,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state("tasks", {
-                url: '/tasks/',
+                url: '/tasks/all',
                 controller: "TasksController",    
                 templateUrl: '../tasks/tasks.html',                                      
                 resolve: { 
@@ -282,15 +282,17 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'Prev
             if (toState.shouldNotRetry){ toState.shouldNotRetry = false; return; }
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
-                toState.shouldNotRetry = true;
-                NavBarManager.showNavBar = true;
+                toState.shouldNotRetry = true;                
                 if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
                 $state.go(toState, toParams);
             }, function(error){
-                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }    
-                NavBarManager.showNavBar = false;            
+                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }                    
                 $state.go('login');
             });
+        });
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
+            if (toState.allowAnonymous){ NavBarManager.showNavBar = false; return; }
+            NavBarManager.showNavBar = true;
         });    
     }
 ]);    
