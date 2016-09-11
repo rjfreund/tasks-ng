@@ -1,8 +1,9 @@
 var app = angular.module("tasks");
 app.controller("TasksController", 
-['$scope', '$state', '$http', '$q', '$state', 'apiHost', '$stateParams', 'TaskActions',
-function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskActions){	
+['$scope', '$state', '$http', '$q', '$state', 'apiHost', '$stateParams', 'TaskActions', '$uibModal',
+function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskActions, $uibModal){	
 	$scope.tasks = [];
+	$scope.haveTasksBeenLoaded = false;
 	$scope.quickAddTask = {};
 	$scope.completeTask = function(task){ 
 		task.is_complete = true; 
@@ -15,6 +16,7 @@ function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskActions){
 		TaskActions.getTasks($stateParams.filter, $stateParams.orderBy)
 		.then(function success(response){			
 			$scope.tasks = response.data;
+			$scope.haveTasksBeenLoaded = true;
 		}, function error(response){			
 			console.error(response);
 		});
@@ -39,12 +41,22 @@ function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskActions){
 		};
 	};	
 	$scope.delete = function(task){
-		TaskActions.deleteTask(task)
-		.then(function(response){
-			$scope.getTasks();
-		}, function(response){
-			console.log(response);
-		});
+		var modalInstance = $uibModal.open({	      
+	      templateUrl: '../tasks/delete-confirm.html',
+	      controller: 'DeleteConfirmController',	      
+	      size: "sm",
+	      resolve: { 
+	      	task: function(){ return task },
+	      	loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/delete-confirm.controller.js'); }] 
+	      } 
+	    });		
+	    console.log(modalInstance);
+	    modalInstance.result.then(function success(response){	    	
+	    	if (response.action === 'delete'){ $scope.getTasks(); return };	    		    
+	    	if (response.action === 'cancel'){ /* do nothing */ return; }	
+	    }, function fail(response){
+	    	if (response.action === 'error'){ console.error(response.message); return; }	    	
+	    });
 	};
 	$scope.collapseQuickAdd = true;
 	$scope.toggleQuickAdd = function(){ $scope.collapseQuickAdd = !$scope.collapseQuickAdd; };

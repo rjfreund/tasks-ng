@@ -3,6 +3,7 @@ var app = angular.module('tasks');
 app.controller("TaskCalendarController", ['$scope', '$http', 'TaskActions', '$state', 
 function($scope, $http, TaskActions, $state){
 	$scope.calendarView = 'month';
+	$scope.hasCalendarBeenLoaded =false;
 	$scope.viewDate = new Date();
 	$scope.events34 = [
 		{
@@ -57,6 +58,7 @@ function($scope, $http, TaskActions, $state){
 					taskId: task.id
 				};
 			});
+			$scope.hasCalendarBeenLoaded = true;
 		}, function error(response){			
 			console.error(response);
 		});

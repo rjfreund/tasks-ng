@@ -1,85 +1,83 @@
-<div class="TaskDetailController">
-	<form class="form-horizontal" name="form" ng-submit="save()">
-	  <div class="form-group">
-	    <label for="taskName" class="col-sm-2 control-label">Name</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.name" type="text" class="form-control" id="taskName" placeholder="Name">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="taskDetails" class="col-sm-2 control-label">Details</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.details" type="text" class="form-control" id="taskDetails" placeholder="Details">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="taskAssignedDate" class="col-sm-2 control-label">Assigned Date</label>
-	    <div class="col-sm-10">
-	    	<div class="input-group">
-	    		<input ng-model="task.assigned_date" type="datetime-local" class="form-control" id="taskAssignedDate">
-	      		<div class="input-group-btn"><button type="button" class="btn btn-default" ng-click="setAssignedDateToToday(task)">Today</button></div>
-	    	</div>	      
-	    </div>	    	    
-	  </div>
-	  <div class="form-group">
-	    <label for="taskDueDate" class="col-sm-2 control-label">Due Date</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.due_date" type="datetime-local" class="form-control" id="taskDueDate">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="taskDaysLeft" class="col-sm-2 control-label">Days Left</label>
-	    <div class="col-sm-10">
-	      <p class="form-control-static">{{getDaysLeft(task)}}</p>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="taskIsComplete" class="col-sm-2 control-label">Is Complete</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.is_complete" ng-change="setCompletionDate(task)" type="checkbox" id="taskIsComplete" placeholder="Details">
-	    </div>
-	  </div>
-	  <div class="form-group" ng-if="task.is_complete">
-	    <label for="taskCompletionDate" class="col-sm-2 control-label">Completion Date</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.completion_date" type="datetime-local" class="form-control" id="taskCompletionDate">
-	    </div>
-	  </div>
-	  <div class="form-group" ng-if="formMode !== 'add'">
-	    <label for="taskCreationDate" class="col-sm-2 control-label">Creation Date</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.creation_date" type="datetime-local" class="form-control" id="taskCreationDate" readonly>
-	    </div>
-	  </div>
-	  <div class="form-group" ng-if="formMode !== 'add'">
-	    <label for="taskCreationDate" class="col-sm-2 control-label">Modified Date</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.modified_date" type="datetime-local" class="form-control" id="taskModifiedDate" readonly>
-	    </div>
-	  </div>
-	  <div class="form-group" ng-if="formMode !== 'add'">
-	    <label for="taskUser" class="col-sm-2 control-label">User</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.user_id" type="number" class="form-control" id="taskUser" readonly>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="taskLocation" class="col-sm-2 control-label">Location</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.location" type="text" class="form-control" id="taskLocation">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label for="taskIsSkipped" class="col-sm-2 control-label">Is Skipped</label>
-	    <div class="col-sm-10">
-	      <input ng-model="task.is_skipped" type="checkbox" id="taskIsSkipped" placeholder="Details">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <div class="col-sm-offset-2 col-sm-10 text-right">
-	      <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-	      <button type="submit" class="btn btn-primary">Save</button>
-	    </div>
-	  </div>
-	</form>
-</div>
+<form class="form-horizontal" name="form" ng-submit="save()">
+  <div class="form-group">
+    <label for="taskName" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+      <input ng-model="task.name" type="text" class="form-control" id="taskName" placeholder="Name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="taskDetails" class="col-sm-2 control-label">Details</label>
+    <div class="col-sm-10">
+      <input ng-model="task.details" type="text" class="form-control" id="taskDetails" placeholder="Details">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="taskAssignedDate" class="col-sm-2 control-label">Assigned Date</label>
+    <div class="col-sm-10">
+    	<div class="input-group">
+    		<input ng-model="task.assigned_date" type="datetime-local" class="form-control" id="taskAssignedDate">
+      		<div class="input-group-btn"><button type="button" class="btn btn-default" ng-click="setAssignedDateToToday(task)">Today</button></div>
+    	</div>	      
+    </div>	    	    
+  </div>
+  <div class="form-group">
+    <label for="taskDueDate" class="col-sm-2 control-label">Due Date</label>
+    <div class="col-sm-10">
+      <input ng-model="task.due_date" type="datetime-local" class="form-control" id="taskDueDate">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="taskDaysLeft" class="col-sm-2 control-label">Days Left</label>
+    <div class="col-sm-10">
+      <p class="form-control-static">{{getDaysLeft(task)}}</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="taskIsComplete" class="col-sm-2 control-label">Is Complete</label>
+    <div class="col-sm-10">
+      <input ng-model="task.is_complete" ng-change="setCompletionDate(task)" type="checkbox" id="taskIsComplete" placeholder="Details">
+    </div>
+  </div>
+  <div class="form-group" ng-if="task.is_complete">
+    <label for="taskCompletionDate" class="col-sm-2 control-label">Completion Date</label>
+    <div class="col-sm-10">
+      <input ng-model="task.completion_date" type="datetime-local" class="form-control" id="taskCompletionDate">
+    </div>
+  </div>
+  <div class="form-group" ng-if="formMode !== 'add'">
+    <label for="taskCreationDate" class="col-sm-2 control-label">Creation Date</label>
+    <div class="col-sm-10">
+      <input ng-model="task.creation_date" type="datetime-local" class="form-control" id="taskCreationDate" readonly>
+    </div>
+  </div>
+  <div class="form-group" ng-if="formMode !== 'add'">
+    <label for="taskCreationDate" class="col-sm-2 control-label">Modified Date</label>
+    <div class="col-sm-10">
+      <input ng-model="task.modified_date" type="datetime-local" class="form-control" id="taskModifiedDate" readonly>
+    </div>
+  </div>
+  <div class="form-group" ng-if="formMode !== 'add'">
+    <label for="taskUser" class="col-sm-2 control-label">User</label>
+    <div class="col-sm-10">
+      <input ng-model="task.user_id" type="number" class="form-control" id="taskUser" readonly>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="taskLocation" class="col-sm-2 control-label">Location</label>
+    <div class="col-sm-10">
+      <input ng-model="task.location" type="text" class="form-control" id="taskLocation">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="taskIsSkipped" class="col-sm-2 control-label">Is Skipped</label>
+    <div class="col-sm-10">
+      <input ng-model="task.is_skipped" type="checkbox" id="taskIsSkipped" placeholder="Details">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10 text-right">
+      <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+</form>

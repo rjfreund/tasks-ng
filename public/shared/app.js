@@ -30,6 +30,7 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 url: '/signup/',
                 controller: 'SignupController',
                 templateUrl: '../signup/signup.html',
+                allowAnonymous: true,
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../signup/signup.controller.js');
@@ -277,7 +278,6 @@ app.factory('NavBarManager', [function(){
 app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'PrevState', 'NavBarManager',
     function($rootScope, $location, $state, $anchorScroll, Security, PrevState, NavBarManager){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
-            if (toState.allowAnonymous){ NavBarManager.showNavBar = false; return; }
             //to prevent infinite loops
             if (toState.shouldNotRetry){ toState.shouldNotRetry = false; return; }
             event.preventDefault();
