@@ -96,24 +96,6 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
             });
     }]);
 
-app.factory('Resources', ['$resource', function($resource){
-    function getResource(resourceName){
-        var resourceOptions = { 'get':    {method:'GET'},
-                                'save':   {method:'POST'},
-                                'query':  {method:'GET', isArray:true},
-                                'remove': {method:'DELETE'},
-                                'delete': {method:'DELETE'} };
-        switch(resourceName){
-            case "tasks":
-            default:
-                return $resource('/task-tracker/' + resourceName + '/:filter');
-        }
-    }
-
-    return { getResource: getResource };
-    
-}]);
-
 app.factory('apiHost', ['$location', function($location){
     if ($location.host().indexOf('localhost') > -1){ return 'http://localhost:3000'; }
     return 'http://api.rjfreund.com';
@@ -174,7 +156,7 @@ app.factory('TaskManager', ['$q', 'apiHost', 'DatetimeFormatter', '$http', funct
             if (!task.is_complete){ task.completion_date = null; return; }
             task.completion_date = new Date(moment().format('MM/DD/YYYY hh:mm a'));
         },
-        setAssignedDateToToday: function(task){task.assigned_date = new Date(moment().format('MM/DD/YYYY hh:mm a')); },
+        setAssignedDateToToday: function(task){ task.assigned_date = new Date(moment().format('MM/DD/YYYY hh:mm a')); },
         saveEdit: function(task){
             return $http({
                 method: "PUT",
@@ -215,7 +197,8 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
         return deferred.promise;        
     }
 
-    function login(email, password){        
+    function login(email, password){  
+        console.log('Security.login()');      
         return $http({
             method: 'POST',
             url: apiHost + '/task-tracker/login',
@@ -284,11 +267,7 @@ app.factory('PrevState', ['$state', function($state){
     };
 }]);
 
-app.factory('NavBarManager', [function(){
-    return {
-        showNavBar: false
-    };
-}]);
+app.factory('NavBarManager', [function(){ return { showNavBar: false }; }]);
 
 app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'PrevState', 'NavBarManager',
     function($rootScope, $location, $state, $anchorScroll, Security, PrevState, NavBarManager){
@@ -301,7 +280,8 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'Prev
                 if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
                 $state.go(toState, toParams);
             }, function(error){
-                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }                    
+                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }  
+                toState.shouldNotRetry = true;  
                 $state.go('login');
             });
         });

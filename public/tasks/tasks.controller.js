@@ -1,7 +1,7 @@
 var app = angular.module("tasks");
 app.controller("TasksController", 
 ['$scope', '$state', '$http', '$q', '$state', 'apiHost', '$stateParams', 'TaskManager', '$uibModal',
-function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskManager, $uibModal){	
+function($scope, $state, $http, $q, $state, apiHost, $stateParams, TaskManager, $uibModal){		
 	$scope.tasks = [];
 	$scope.haveTasksBeenLoaded = false;
 	$scope.quickAddTask = {};
