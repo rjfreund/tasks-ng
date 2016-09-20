@@ -1,18 +1,19 @@
-
-<link href="login.css" rel="stylesheet">
-
-<form class="form-signin" name="loginForm" ng-controller="LoginController" ng-submit="login(credentials)" novalidate>
-  <h2 class="form-signin-heading">Please log in</h2>
+<form class="user-credentials" name="loginForm" ng-submit="login(credentials)" novalidate>
+  <div class="display-table full-width">
+    <div class="display-table-row">
+      <div class="display-table-cell"><h2 class="user-credentials-heading">Log In</h2></div>    
+      <div class="display-table-cell text-right"><a ui-sref="signup">Sign Up</a></div>  
+    </div>          
+  </div>   
   <label for="inputEmail" class="sr-only">Email address</label>
   <input type="email" id="inputEmail" class="form-control" placeholder="Email address" ng-model="credentials.email" required autofocus>
   <label for="inputPassword" class="sr-only">Password</label>
   <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="credentials.password" required>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+  <!--
+  TODO: Finish implementing forgot password functionality
+  <a ui-sref="change-password" class="forgot-password">Forgot password?</a>
+  -->
+  <button class="btn btn-lg btn-primary btn-block login" type="submit">Log In</button>
   <div class="alert alert-danger" role="alert" ng-if="error">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span class="sr-only">Error:</span>

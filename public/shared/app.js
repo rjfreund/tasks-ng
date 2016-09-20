@@ -21,14 +21,20 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                 templateUrl: '../login/login.html',
                 params: { continueState: null }, 
                 allowAnonymous: true,
-                resolve: { 
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../login/login.controller.js');
-                    }]
-                }
+                resolve: {  loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../login/login.controller.js'); }] }
             }).state("signup", {
                 url: '/signup/',
                 controller: 'SignupController',
+                templateUrl: '../signup/signup.html',
+                allowAnonymous: true,
+                resolve: { 
+                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
+                        return $ocLazyLoad.load('../signup/signup.controller.js');
+                    }]
+                }
+            }).state("signup-email-sent", {
+                url: '/signup/email-sent',
+                controller: 'SignupEmailSentController',
                 templateUrl: '../signup/signup.html',
                 allowAnonymous: true,
                 resolve: { 
@@ -45,6 +51,12 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                         return $ocLazyLoad.load('../confirm-signup/confirm-signup.controller.js');
                     }]
                 }
+            }).state("change-password", {
+                url: '/change-password/',
+                controller: 'ChangePasswordController',
+                templateUrl: '../change-password/change-password.html',
+                allowAnonymous: true,
+                resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../change-password/change-password.controller.js'); }] }
             }).state("tasks", {
                 url: '/tasks/all',
                 controller: "TasksController",    
@@ -184,7 +196,7 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
         }).then(function success(response){
             return response;
         }, function error(response){
-            return response;
+            $q.reject(response);
         });
     }
 

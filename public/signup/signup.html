@@ -1,5 +1,10 @@
-<form class="form-signin" name="loginForm" ng-controller="SignupController" ng-submit="signup(credentials)" novalidate>
-  <h2 class="form-signin-heading">Sign Up</h2>
+<form class="user-credentials" ng-submit="signup(credentials)" novalidate>
+  <div class="display-table full-width">
+    <div class="display-table-row">
+      <div class="display-table-cell"><h2 class="user-credentials-heading">Sign Up</h2></div>    
+      <div class="display-table-cell text-right"><a ui-sref="signup">Log In</a></div>  
+    </div>          
+  </div>
   <label for="first_name" class="sr-only">First name</label><input type="text" id="first_name" class="form-control" placeholder="First name" ng-model="credentials.first_name" required autofocus />
   <label for="last_name" class="sr-only">Last name</label><input type="text" id="last_name" class="form-control" placeholder="Last name" ng-model="credentials.last_name" required autofocus />
   <label for="inputEmail" class="sr-only">Email address</label><input type="email" id="inputEmail" class="form-control" placeholder="Email address" ng-model="credentials.email" required >
