@@ -43,9 +43,10 @@ app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resou
                     }]
                 }
             }).state("confirm-signup", {
-                url: '/confirm-signup/:signupId/',
+                url: '/confirm-signup/:signupId',
                 controller: 'ConfirmSignupController',
                 templateUrl: '../confirm-signup/confirm-signup.html',
+                allowAnonymous: true,
                 resolve: { 
                     loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
                         return $ocLazyLoad.load('../confirm-signup/confirm-signup.controller.js');
@@ -209,8 +210,7 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
         return deferred.promise;        
     }
 
-    function login(email, password){  
-        console.log('Security.login()');      
+    function login(email, password){
         return $http({
             method: 'POST',
             url: apiHost + '/task-tracker/login',
@@ -259,7 +259,7 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
     }
     return { 
         signup: signup,
-        login: login, 
+        login: login,
         logout: logout,
         getToken: getToken, 
         isUserAuthenticated: isUserAuthenticated,
@@ -286,8 +286,9 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'Prev
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
             //to prevent infinite loops
             if (toState.shouldNotRetry){ toState.shouldNotRetry = false; return; }
+            if (toState.allowAnonymous){ return; } /* continue to state without checking if logged in*/ 
             event.preventDefault();
-            Security.isUserAuthenticated().then(function(userIsAuthenicated){                               
+            Security.isUserAuthenticated().then(function(userIsAuthenicated){                             
                 toState.shouldNotRetry = true;                
                 if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
                 $state.go(toState, toParams);
