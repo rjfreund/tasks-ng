@@ -1,41 +1,52 @@
-<div ng-if="!haveTasksBeenLoaded" class="text-center"><span class="glyphicon glyphicon-refresh spinning"></span></div>
-<form ng-if="haveTasksBeenLoaded" name="form" ng-submit="quickAddTaskSubmit(form)">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Assigned Date</th>
-				<th>Due Date</th>
-				<th>Days Left</th>
-				<th><!-- buttons --></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="task in tasks">
-				<td>{{task.name}}</td>
-				<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
-				<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
-				<td>{{getDaysLeft(task)}}</td>
-				<td class="text-right">
-					<button ng-if="!task.is_complete" ng-click="completeTask(task)" uib-tooltip="Complete" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
-					<a uib-tooltip="Edit" ui-sref="editTask({taskId:task.id})" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-					<button uib-tooltip="Delete" ng-click="delete(task)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
-				</td>
-			</tr>
-			<tr uib-collapse="collapseQuickAdd">
-				<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
-</form>
+<breadcrumbs></breadcrumbs>
+<div ng-if="!haveTaskRemindersBeenLoaded" class="text-center"><span class="glyphicon glyphicon-refresh spinning"></span></div>
+<form ng-if="haveTaskRemindersBeenLoaded" name="form" ng-submit="quickAddTaskSubmit(form)"></form>
+<div ng-if="haveTaskRemindersBeenLoaded" class="continer-fluid">
+	<div class="row">
+		<div class="col-xs-6">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Assigned Date</th>
+						<th>Due Date</th>
+						<th>Days Left</th>
+						<th>
+							<button class="btn btn-primary pull-right btn-sm" type="button">Add</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="task in tasks">
+						<td><a ui-sref="tasks({filter:getFilter(task.id)})">{{task.name}}</a></td>
+						<td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
+						<td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
+						<td>{{getDaysLeft(task)}}</td>
+						<td></td> <!-- buttons -->
+						<!-- <td class="text-right">
+							<button ng-if="!task.is_complete" ng-click="completeTask(task)" uib-tooltip="Complete" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
+							<a uib-tooltip="Edit" ui-sref="editTask({taskId:task.id})" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+							<button uib-tooltip="Delete" ng-click="delete(task)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+						</td> -->
+					</tr>
+					<tr uib-collapse="collapseQuickAdd">
+						<td><input type="text" placeholder="Name" class="form-control" ng-model="quickAddTask.name" /></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div ui-view="details" class="col-xs-6"></div>
+	</div>
+</div>
+<!--
 <div ng-if="!areAddTaskButtonsHidden()">
 	<button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
 	<a class="btn btn-default" ui-sref="addTask">Add Task</a>
 </div>
+-->
 
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">

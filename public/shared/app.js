@@ -1,113 +1,126 @@
-var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'mwl.calendar', 'oc.lazyLoad', 'chart.js', 'ngStorage']);
+var app = angular.module('tasks', ['ui.router', 'ui.router.title', 'ngSanitize', 'ngResource', 'ui.bootstrap', 'mwl.calendar', 'oc.lazyLoad', 'chart.js', 'ngStorage', 'ngAnimate']);
 
-app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider",
-    function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider){
-        $urlRouterProvider.otherwise("/tasks/todo/");
-        $resourceProvider.defaults.stripTrailingSlashes = false;        
-        $locationProvider.html5Mode(true).hashPrefix('!');
-        $stateProvider
-            .state("todo", {
-                url: '/tasks/todo/',                
-                controller: 'TasksController',                        
-                templateUrl: '../tasks/tasks.html',
-                params: { 
-                    filter: { is_complete: false }, 
-                    orderBy: ['due_date', 'asc']
-                },
-                resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/tasks.controller.js'); }] }                                                                                                    
-            }).state("login", {
-                url: '/login/',
-                controller: 'LoginController',
-                templateUrl: '../login/login.html',
-                params: { continueState: null }, 
-                allowAnonymous: true,
-                resolve: {  loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../login/login.controller.js'); }] }
-            }).state("signup", {
-                url: '/signup/',
-                controller: 'SignupController',
-                templateUrl: '../signup/signup.html',
-                allowAnonymous: true,
-                resolve: { 
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../signup/signup.controller.js');
-                    }]
-                }
-            }).state("signup-email-sent", {
-                url: '/signup/email-sent',
-                controller: 'SignupEmailSentController',
-                templateUrl: '../signup/signup.html',
-                allowAnonymous: true,
-                resolve: { 
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../signup/signup.controller.js');
-                    }]
-                }
-            }).state("confirm-signup", {
-                url: '/confirm-signup/:signupId',
-                controller: 'ConfirmSignupController',
-                templateUrl: '../confirm-signup/confirm-signup.html',
-                allowAnonymous: true,
-                resolve: { 
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../confirm-signup/confirm-signup.controller.js');
-                    }]
-                }
-            }).state("change-password", {
-                url: '/change-password/',
-                controller: 'ChangePasswordController',
-                templateUrl: '../change-password/change-password.html',
-                allowAnonymous: true,
-                resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../change-password/change-password.controller.js'); }] }
-            }).state("tasks", {
-                url: '/tasks/all',
-                controller: "TasksController",    
-                templateUrl: '../tasks/tasks.html',                                      
-                resolve: { 
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../tasks/tasks.controller.js');
-                    }]
-                }              
-            }).state("completedTasks", {
-                url: '/tasks/completed/',
-                controller: "TasksController",    
-                templateUrl: '../tasks/tasks.html',
-                params: { 
-                    filter: { is_complete: true },
-                    orderBy: ['due_date', 'desc'],
-                    areAddTaskButtonsHidden: true
-                },                                      
-                resolve: { loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) { return $ocLazyLoad.load('../tasks/tasks.controller.js'); }] }              
-            }).state('taskCalendar', {
-                url: '/tasks/calendar/',
-                controller: 'TaskCalendarController',
-                templateUrl: '../task-calendar/task-calendar.html',
-                resolve: {
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../task-calendar/task-calendar.controller.js');
-                    }]
-                }
-            }).state('addTask', {
-                url: '/tasks/add/',
+app.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$resourceProvider", "$compileProvider",
+function($stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider, $compileProvider){    
+    app.compileProvider = $compileProvider;
+    var defaultUrl = '/tasks/todo/';
+    $urlRouterProvider.otherwise(defaultUrl);
+    $resourceProvider.defaults.stripTrailingSlashes = true;
+    $locationProvider.html5Mode(true).hashPrefix('!');
+    
+    /* 
+    $stateProvider //old router
+    .state("todo", {
+        url: defaultUrl,
+        controller: 'TasksController',
+        templateUrl: '../tasks/tasks.html',                        
+        params: {
+            filter: { completion_date: null, parent_id: null },
+            orderBy: ['due_date', 'asc'],
+            formMode: 'edit',
+        },
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load(['../tasks/tasks.controller.js', '../breadcrumbs/breadcrumbs.directive.js']); }] }        
+    }).state("login", {
+        url: '/login/',
+        controller: 'LoginController',
+        templateUrl: '../login/login.html',
+        params: { continueState: null },
+        allowAnonymous: true,
+        resolve: {  loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../login/login.controller.js'); }] }
+    }).state("signup", {
+        url: '/signup/',
+        controller: 'SignupController',
+        templateUrl: '../signup/signup.html',
+        allowAnonymous: true,
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../signup/signup.controller.js'); }] }
+    }).state("signup-email-sent", {
+        url: '/signup/email-sent/',
+        controller: 'SignupEmailSentController',
+        templateUrl: '../signup/signup.html',
+        allowAnonymous: true,
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../signup/signup.controller.js'); }] }
+    }).state("confirm-signup", {
+        url: '/confirm-signup/:signupId/',
+        controller: 'ConfirmSignupController',
+        templateUrl: '../confirm-signup/confirm-signup.html',
+        allowAnonymous: true,
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../confirm-signup/confirm-signup.controller.js'); }] }
+    }).state("change-password", {
+        url: '/change-password/',
+        controller: 'ChangePasswordController',
+        templateUrl: '../change-password/change-password.html',
+        allowAnonymous: true,
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../change-password/change-password.controller.js'); }] }
+    }).state("allTasks", {
+        url: '/tasks/all/',
+        controller: "DynamicTemplateListController",
+        templateUrl: '../dynamic-template/dynamic-template-list.html',
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../dynamic-template/dynamic-template-list.controller.js'); }] }
+    }).state('taskReminders', {
+        url: '/tasks-reminders/',
+        controller: 'TaskRemindersController',
+        templateUrl: '../task-reminders/task-reminders.html',
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-reminders/task-reminders.controller.js'); }] }
+    }).state('addTaskReminder', {
+        url: '/tasks-reminders/add/',
+        controller: 'TaskReminderDetailController',
+        templateUrl: '../task-reminder-detail/task-reminder-detail.html',
+        params: {taskReminder: {}, task: {}, formMode: 'add'},
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-reminder-detail/task-reminder-detail.controller.js'); }] }
+    }).state('editTaskReminder', {
+        url: '/tasks-reminders/:taskReminderId/',
+        controller: 'TaskReminderDetailController',
+        templateUrl: '../task-detail/task-detail.html',
+        params: {formMode: 'edit'},
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-reminder-detail/task-reminder-detail.js'); }] }
+    }).state("completedTasks", {
+        url: '/tasks/completed/',
+        controller: "TasksController",
+        templateUrl: '../tasks/tasks.html',
+        params: {
+            filter: { completion_date: null },
+            orderBy: ['due_date', 'desc'],
+            areAddTaskButtonsHidden: true
+        },
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../tasks/tasks.controller.js'); }] }
+    }).state('addTask', {
+        url: '/tasks/add/',
+        controller: 'TaskDetailController',
+        templateUrl: '../task-detail/task-detail.html',
+        params: {task: {}, formMode: 'add'},
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-detail/task-detail.controller.js'); }] }
+    }).state('editTask', {
+        url: '/tasks/details/:taskId/',        
+        controller: 'TaskDetailController',
+        templateUrl: '../task-detail/task-detail.html',
+        params: {formMode: 'edit'},
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-detail/task-detail.controller.js'); }] }            
+    }).state('taskCalendar', {
+        url: '/tasks/calendar',
+        controller: 'TaskCalendarController',
+        templateUrl: '../task-calendar/task-calendar.html/',
+        resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-calendar/task-calendar.controller.js'); }] }
+    }).state('tasks', {
+        url: '/tasks/:filter/',
+        params: {            
+            orderBy: ['due_date', 'asc'],
+            formMode: 'edit',
+        },
+        views: {
+            '': {
+                controller: 'TasksController',
+                templateUrl: '../tasks/tasks.html',                
+                resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load(['../breadcrumbs/breadcrumbs.directive.js', '../tasks/tasks.controller.js']); }] }        
+            },
+            'details@tasks': {
                 controller: 'TaskDetailController',
-                templateUrl: '../task-detail/task-detail.html',  
-                params: {task: {}, formMode: 'add'},                                                         
-                resolve: {
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
-                    }]
-                }
-            }).state('editTask', {
-                url: '/tasks/:taskId/', 
-                controller: 'TaskDetailController',               
-                templateUrl: '../task-detail/task-detail.html',  
-                params: {formMode: 'edit'},                                                         
-                resolve: {
-                    loadCtrl: ['$ocLazyLoad', function($ocLazyLoad) {                      
-                        return $ocLazyLoad.load('../task-detail/task-detail.controller.js');
-                    }]
-                }
-            });
-    }]);
+                templateUrl: '../task-detail/task-detail.html',                
+                resolve: { loadCtrl: ['$ocLazyLoad', function($o) { return $o.load('../task-detail/task-detail.controller.js'); }] }                
+            }
+        }
+    });
+    */
+}]);
 
 app.factory('apiHost', ['$location', function($location){
     if ($location.host().indexOf('localhost') > -1){ return 'http://localhost:3000'; }
@@ -117,6 +130,7 @@ app.factory('apiHost', ['$location', function($location){
 app.factory('DatetimeFormatter', [function(){
     return {
         toUTC: function(object, properties){
+            if (!object){ return; }
             var returnObject = angular.copy(object);
             for (var i = 0; i < properties.length; i++){ 
                 if (!returnObject.hasOwnProperty(properties[i])){ continue; }
@@ -126,6 +140,7 @@ app.factory('DatetimeFormatter', [function(){
             return returnObject;
         },
         toLocal: function(object, properties){
+            if (!object){ return; }
             var returnObject = angular.copy(object);
             for (var i = 0; i < properties.length; i++){ 
                 if (!returnObject.hasOwnProperty(properties[i])){ continue; }
@@ -152,10 +167,27 @@ app.factory('CategoryManager', ['$q', 'apiHost', 'DatetimeFormatter', '$http', f
     };
 }]);
 
+app.factory('StringHelper', [function(){
+    return {
+        humanize: function(str){
+            var frags = str.split('_');
+            for (i=0; i<frags.length; i++) {
+                frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
+            }
+            return frags.join(' ');
+        }
+    };
+}]);
+
 app.factory('TaskManager', ['$q', 'apiHost', 'DatetimeFormatter', '$http', function($q, apiHost, DatetimeFormatter, $http){
     return {
-        getSingleTask: function(taskId){ return $http({method: "GET", url: apiHost + "/task-tracker/tasks/", params: { filter: {id: taskId} } }) },
-        getTasks: function(filter, orderBy){ 
+        getSingleTask: function(taskId){ 
+            return $http({method: "GET", url: apiHost + "/task-tracker/tasks/", params: { filter: {id: taskId} }
+         }).then(function(response){
+             return response.data[0];
+         }); 
+        },
+        getTasks: function(filter, orderBy, isNested){
             var options = {
               method: 'GET',
               url: apiHost + '/task-tracker/tasks/',
@@ -163,7 +195,29 @@ app.factory('TaskManager', ['$q', 'apiHost', 'DatetimeFormatter', '$http', funct
             };
             if (filter){ options.params.filter = filter; }
             if (orderBy){ options.params.orderBy = orderBy; }
-            return $http(options);
+            if (!isNested){ isNested = false; }
+            else { isNested = true }
+            options.params.isNested = isNested;
+            return $http(options)
+            .then(function(response){
+               return response.data; 
+            });
+        },
+        getTaskAncestors: function(taskId){
+            return $http({
+                method: 'GET',
+                url: apiHost + '/task-tracker/tasks/ancestors/' + taskId,                
+            }).then(function(response){
+                return response.data;
+            });
+        },
+        getTaskStatusOpions: function(){
+            return $http({
+                method: 'GET',
+                url: apiHost + '/task-tracker/task_status_options'
+            }).then(function(response){
+                return response.data;
+            });
         },
         setCompletionDate: function(task){ 
             if (!task.is_complete){ task.completion_date = null; return; }
@@ -197,7 +251,7 @@ app.factory("Security", ['$http','$q', '$localStorage', 'apiHost', function($htt
         }).then(function success(response){
             return response;
         }, function error(response){
-            $q.reject(response);
+            return $q.reject(response.data);
         });
     }
 
@@ -281,17 +335,17 @@ app.factory('PrevState', ['$state', function($state){
 
 app.factory('NavBarManager', [function(){ return { showNavBar: false }; }]);
 
-app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'PrevState', 'NavBarManager',
-    function($rootScope, $location, $state, $anchorScroll, Security, PrevState, NavBarManager){
+app.run(['$rootScope', '$state', '$anchorScroll', 'Security', 'PrevState', 'NavBarManager', '$window',
+    function($rootScope, $state, $anchorScroll, Security, PrevState, NavBarManager, $window){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){            
             //to prevent infinite loops
             if (toState.shouldNotRetry){ toState.shouldNotRetry = false; return; }
             if (toState.allowAnonymous){ return; } /* continue to state without checking if logged in*/ 
             event.preventDefault();
             Security.isUserAuthenticated().then(function(userIsAuthenicated){                             
-                toState.shouldNotRetry = true;                
-                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }
-                $state.go(toState, toParams);
+                toState.shouldNotRetry = true;
+                if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }                
+                $state.go(toState, toParams);                
             }, function(error){
                 if (fromState.name !== ""){ PrevState.set(fromState.name, fromParams); }  
                 toState.shouldNotRetry = true;  
@@ -300,7 +354,7 @@ app.run(['$rootScope', '$location', '$state', '$anchorScroll', 'Security', 'Prev
         });
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
             if (toState.allowAnonymous){ NavBarManager.showNavBar = false; return; }
-            NavBarManager.showNavBar = true;
+            NavBarManager.showNavBar = true;            
         });    
     }
 ]);    

@@ -1,0 +1,24 @@
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th><!-- buttons --></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="taskReminder in taskReminders">
+            <td>{{taskReminder.name}}</td>
+            <td>{{taskReminder.datetime | date:'yyyy-MM-dd h:mma'}}</td>
+            <td class="text-right">
+                <a uib-tooltip="Edit" ui-sref="editTaskReminder({taskId:task.id})" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <button uib-tooltip="Delete" ng-click="deleteTaskReminder(taskReminder)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <a class="btn btn-default" ui-sref="addTaskReminder(task)">Add Task</a>
+    </div>
+</div>

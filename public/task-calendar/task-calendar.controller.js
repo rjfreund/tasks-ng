@@ -32,8 +32,8 @@ function($scope, $http, TaskManager, $state){
 	$scope.events = [];
 	$scope.getEvents = function(){ 		
 		TaskManager.getTasks({is_complete: false})
-		.then(function success(response){			
-			$scope.events = response.data.map(function(task){
+		.then(function success(tasks){			
+			$scope.events = tasks.map(function(task){
 				return {
 					title: task.name, // The title of the event
 					startsAt: new Date(task.assigned_date), // A javascript date object for when the event starts

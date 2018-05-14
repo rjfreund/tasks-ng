@@ -1,0 +1,49 @@
+
+<table class="table">
+    <thead>
+    <tr>
+        <th ng-repeat="column in allowedColumns">
+            {{column}}
+        </th>
+        <th><!-- buttons --></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="entity in entities">
+        <!--
+        <td>{{task.name}}</td>
+        <td>{{task.assigned_date | date:'yyyy-MM-dd h:mma'}}</td>
+        <td>{{task.due_date | date:'yyyy-MM-dd h:mma'}}</td>
+        <td>{{getDaysLeft(task)}}</td>
+        <td class="text-right">
+            <button ng-if="!task.is_complete" ng-click="completeTask(task)" uib-tooltip="Complete" class="btn btn-default" type="button"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
+            <a uib-tooltip="Edit" ui-sref="editTask({taskId:task.id})" class="btn btn-default" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <button uib-tooltip="Delete" ng-click="delete(task)" class="btn btn-default" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        </td>
+        -->
+    </tr>
+    </tbody>
+</table>
+<!--
+<div ng-if="!areAddTaskButtonsHidden()">
+    <button class="btn btn-default" ng-click="toggleQuickAdd()">Quick Add</button>
+    <a class="btn btn-default" ui-sref="addTask">Add Task</a>
+</div>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title"></h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <ul>
+            <li ng-repeat="item in $ctrl.items">
+                <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+    </div>
+</script>
+-->

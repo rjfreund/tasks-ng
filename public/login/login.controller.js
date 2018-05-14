@@ -1,11 +1,13 @@
 var app = angular.module('tasks');
 
 app.controller("LoginController", ['$scope', '$state', 'Security', '$stateParams',
-function($scope, $state, Security, $stateParams) {               
+function($scope, $state, Security, $stateParams) {   
+    $scope.credentials = { email: null, password: null };            
     $scope.error = '';
     $scope.login = function(credentials){
-        if (!credentials.email){ alert("Email is invalid."); return; }
-        if (!credentials.password){ alert("Password is invalid"); return; }
+        $scope.error = '';
+        if (!credentials.email){ $scope.error="Email is invalid."; return; }
+        if (!credentials.password){ $scope.error="Password is invalid"; return; }
         Security.login(credentials.email, credentials.password)
         .then(function(token){
             if ($stateParams.continueState){ 
@@ -13,8 +15,9 @@ function($scope, $state, Security, $stateParams) {
                 return;
             }
             $state.go('todo');
-        }, function(error){
-            $scope.error = error.data;
+        }, function(response){
+            if (response.status == -1){ $scope.error = "Could not connect to database server."; return; }
+            $scope.error = response.data;
         });
     };
 }]);

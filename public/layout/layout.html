@@ -6,28 +6,28 @@
 	<title>Task-Tracker</title>
 	<base href="/" />
 	<script src="../../bower_components/angular/angular.min.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
 	<script src="../../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 	<script src="../../bower_components/angular-ui-router-title/src/angular-ui-router-title.js"></script>
 	<script src="../../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 	<script src="../../bower_components/angular-resource/angular-resource.min.js"></script>
 	<script src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-	<script src="../../bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
-	<script src="../../bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
+	<script src="../../bower_components/oclazyload/dist/ocLazyLoad.js"></script>
 	<script src="../../bower_components/Chart.js/Chart.js"></script>
 	<script src="../../bower_components/angular-chart.js/dist/angular-chart.min.js"></script>	
 	<script src="../../bower_components/ngstorage/ngStorage.min.js"></script>
 	<script src="../../bower_components/moment/moment.js"></script>
 	<script src="../../bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.min.js"></script>
 	<script src="../../bower_components/underscore/underscore.js"></script>	
-	<script src="../shared/app.js"></script>
+	<!-- <script src="../shared/app.js"></script> -->
+	<script src="../router/router.directive.js"></script>
 	<script src="../navbar/navbar.directive.js"></script>
 	<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="../../bower_components/font-awesome/css/font-awesome.css" rel="stylesheet" >
 	<link href="../../bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css" rel="stylesheet">
 	<link href="../shared/style.css" rel="stylesheet" />
 </head>
-<body>
-	<navbar></navbar>
-	<main ui-view class="container"></main>
+<body>	
+	<div main class="container"></div>
 </body>
 </html>

@@ -1,0 +1,1 @@
+$scope.getBreadcrumbs($stateParams.parent_id);
